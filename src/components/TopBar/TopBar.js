@@ -1,5 +1,6 @@
 import React from 'react';
-import './TopBar.css';
+import './TopBar.scss';
+import logo from '../../Images/logo.png'
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchProduct from '../SearchProduct/SearchProduct'
@@ -11,7 +12,7 @@ const TopBar = () => {
         <div className="nav-left">
           {/* <FontAwesomeIcon icon={faBars} /> */}
           <a href="/" className="topbar-logo">
-            <img src="" alt="logo" />
+            <img src={logo} className="logo" alt="logo" />
           </a>
         </div>
         <div className="topbar-wrapper">

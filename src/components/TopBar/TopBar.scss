@@ -1,10 +1,12 @@
+@import '../../variables.scss';
+
 #h-index {
-    margin-bottom: 60px;
+    margin-bottom: $topbar-height;
 }
 .topbar {
     display: flex;
     width: 100vw;
-    height: 60px;
+    height: $topbar-height;
     background-color: #772ca8;
     justify-content: center;
     position: fixed;
@@ -30,6 +32,15 @@
     justify-content: space-between;
     align-items: center;
     margin-right: 50px;
+}
+
+.topbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.topbar-logo .logo {
+    width: 125px;
 }
 
 .nav-right {

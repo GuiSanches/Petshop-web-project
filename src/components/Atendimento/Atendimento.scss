@@ -1,0 +1,80 @@
+$card-radius: 95px;
+
+.atendimentos {
+    display: flex;
+    background-color: #fad4ed;
+    justify-content: center;
+    width: 100%;
+
+    margin-bottom: 5em;
+
+    a {
+        text-decoration: none;
+    }
+} 
+.atendimentos-container {
+    display: flex;
+    flex: 1;
+    max-width: 1024px;
+}
+
+.atendimentos-left {
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-start;
+    justify-content: flex-start;
+    flex: 1;
+    text-align: left;
+
+    .title {
+
+    }
+
+    .content {
+        font-size: 1.3em;
+    }
+}
+
+.atendimentos-right {
+    display: flex;
+    flex: 0.8;
+    justify-content:space-around;
+
+    .card-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .card-box:last-child .card-round {
+        width: $card-radius + 45px !important;
+    }
+
+    .card-round {
+        display: flex;
+        width: $card-radius;
+        height: $card-radius;
+        border-radius: 50%;
+        background-color: orange;
+    }
+
+    .card-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .card-btn {
+        display: flex;
+        width: 80px;
+        justify-content: center;
+        background-color: #ffffff;
+        border-radius: 20px;
+        padding: 0.2em 0.4em;
+        font-size: 0.9em;
+        text-transform: uppercase;
+    }
+}
