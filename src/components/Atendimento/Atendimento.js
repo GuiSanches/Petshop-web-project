@@ -22,9 +22,9 @@ const Atendimento = props => {
         }
     ]
     const generateCards = cards => {
-        return cards.map(card => {
+        return cards.map((card,i) => {
             return (
-                <div className="card-box">
+                <div className="card-box" key={card + i}>
                     <div className="card-round"></div>
                     <div className="card-info">
                         <p>{card.name}</p>

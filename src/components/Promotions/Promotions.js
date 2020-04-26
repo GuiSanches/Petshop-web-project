@@ -37,9 +37,9 @@ const Promotions = props => {
     }]
 
     const generateCards = (cards) => {
-        return cards.map(card => {
+        return cards.map((card,i) => {
             return (
-                <div className="p-card">
+                <div className="p-card" key={card + i}>
                     <div className="p-card-wrap">
                         <h3 className="p-card-title">{card.title}</h3>
                         <div className="p-card-content">

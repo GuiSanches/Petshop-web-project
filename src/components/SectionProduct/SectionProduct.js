@@ -10,9 +10,9 @@ const SectionProduct = props => {
     const { sessionTitle, cards } = props
 
     const generateCards = cardsArray => {
-        return cardsArray.map(card => {
+        return cardsArray.map((card,i) => {
             return (
-                <div className="card-product">
+                <div className="card-product" key={card + i}>
                     <h1>{card.title}</h1>
                     <div className="product-subtitle">
                         {card.content}

@@ -7,6 +7,7 @@ import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
 import SectionProduct from '../SectionProduct/SectionProduct'
 import Promotions from '../Promotions/Promotions'
 import Atendimento from '../Atendimento/Atendimento'
+import Equipe from '../Equipe/Equipe'
 
 const ProductsPage = () => {
     const cards = Array.from(
@@ -29,6 +30,7 @@ const ProductsPage = () => {
                 <SectionProduct {...sessionsContent[0]} />
             </div>
             <Atendimento />
+            <Equipe title="Equipe"/>
         </div>
     );
 }
