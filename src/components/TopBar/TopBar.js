@@ -37,7 +37,7 @@ const NavItens = _ => {
       content: 'Meus Pedidos'
     },
     {
-      link: '/login',
+      link: '/account/login',
       content: 'Minha Conta'
     },
   ]

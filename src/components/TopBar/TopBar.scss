@@ -71,8 +71,10 @@
 .nav-item:hover {
     background-color: #5d2085;
     color: #333333;
+    transition: 0.4s;
 }
 
 .nav-item:hover a {
     color: #ffffff;
+    transition: 0.6s;
 }

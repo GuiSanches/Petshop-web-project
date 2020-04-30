@@ -1,0 +1,239 @@
+import './Perfil.scss'
+import Topbar from '../../components/TopBar/TopBar';
+import Footer from '../../components/Footer/Footer'
+import React, { useState } from 'react'
+import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
+
+const Perfil = props => {
+    const { userData, type, setUserByType } = React.useContext(UserCtx)
+
+    const InfoForm = ({ info }) => {
+        return (
+            <div key={info.label} className="info-row">
+                <p className="info-label">{info.label}</p>
+                <p className="info-data">{info.content}</p>
+                <button className="edit-btn" disabled={!info.editable}>
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+        )
+    }
+
+    const generateUserInfo = userInfo => {
+        console.log(userInfo)
+        const arrInfo = [
+            {
+                label: 'Nome:',
+                content: userInfo.nome,
+                editable: true
+            },
+            {
+                label: 'Email:',
+                content: userInfo.email,
+                editable: true
+            },
+            {
+                label: 'Telefone:',
+                content: userInfo.telefone,
+                editable: true
+            },
+            {
+                label: 'Data de nascimento:',
+                content: userInfo.DataNascimento,
+                editable: true
+            },
+            {
+                label: 'Signo:',
+                content: userData.signo,
+                editable: false
+            }
+        ]
+
+        return (
+            <div className="info-box">
+                <h2 className="user-container-label">Sobre</h2>
+                {arrInfo.map(info => <InfoForm info={info} />)}
+            </div>
+        )
+    }
+
+    const generateAdminInfo = userInfo => {
+        console.log(userInfo)
+        const arrInfo = [
+            {
+                label: 'Nome:',
+                content: userInfo.nome,
+                editable: true
+            },
+            {
+                label: 'Email:',
+                content: userInfo.email,
+                editable: true
+            },
+            {
+                label: 'Telefone:',
+                content: userInfo.telefone,
+                editable: true
+            },
+            {
+                label: 'Data de nascimento:',
+                content: userInfo.DataNascimento,
+                editable: true
+            },
+            {
+                label: 'Signo:',
+                content: userData.signo,
+                editable: false
+            }
+        ]
+
+        return (
+            <div className="info-box">
+                <h2 className="user-container-label">{userInfo.nome}</h2>
+                <p>{userInfo.email}</p>
+            </div>
+        )
+    }
+
+    const generateUserActions = _ => {
+        const actions = [
+            {
+                label: "Histórico de compras",
+                ref: '/'
+            },
+            {
+                label: "Agendamentos",
+                ref: '/'
+            },
+            {
+                label: "Registro de pet",
+                ref: '/'
+            }
+        ]
+        const actionList = actions.map(action => (
+            <a
+                href={action.ref} key={action.label} className="action-item"
+            >{action.label}</a>)
+        )
+
+        return (
+            <div className="action-list">
+                <h2>Compras</h2>
+                {actionList}
+            </div>
+        )
+    }
+
+    const generateAdminActions = _ => {
+        const actions = [
+            {
+                label: "Cadastrar novo admin",
+                ref: '/'
+            },
+            {
+                label: "Cadastrar Cliente",
+                ref: '/'
+            },
+            {
+                label: "Inventário",
+                ref: '/'
+            },
+            {
+                label: "Adicionar novo serviço",
+                ref: '/'
+            },
+            {
+                label: "Meus agendamentos",
+                ref: '/'
+            }
+        ]
+        const actionList = actions.map(action => (
+            <a
+                href={action.ref} key={action.label} className="action-item"
+            >{action.label}</a>)
+        )
+
+        return (
+            <div className="action-list" style={{marginTop: '-5em'}}>
+                <h2>Ações</h2>
+                {actionList}
+            </div>
+        )
+    }
+
+    const UserInfo = _ => {
+        const [action, setAction] = React.useState(_ => generateUserActions)
+        const [generateInfo, setgenerateInfo] = React.useState(_ => generateUserInfo)
+
+        React.useEffect(() => {
+            if (type === 'user') {
+                setgenerateInfo(_ => generateUserInfo)
+                setAction(_ => generateUserActions)
+            } else {
+                setgenerateInfo(_ => generateAdminInfo)
+                setAction(_ => generateUserActions)
+                setAction(_ => generateAdminActions)
+            }
+
+        }, [type])
+
+        return (
+            <div className="Perfil-info">
+                <div className="user-data-container">
+                    <div className="user-data-box">
+                        {generateInfo(userData)}
+                    </div>
+                    <div className="foto-box">
+                        <img src={userData.foto} alt="Foto de perfil" />
+                        <p>Alterar foto de perfil</p>
+                    </div>
+                </div>
+
+                <div className="actions-container">
+                    {action()}
+                    <div className="patinha">
+                        <svg width="150" viewBox="0 0 298 503" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M193.181 394.993C182.39 393.375 174.822 389.992 170.022 384.653C152.141 364.699 124.247 357.829 102.73 368.985C81.2152 380.14 70.0359 407.268 76.0449 433.392C77.6307 440.369 76.04 448.515 71.1452 458.276C65.1926 470.171 66.3902 483.172 74.275 492.219C83.7585 503.106 103.287 507.035 122.144 497.258C130.117 493.125 136.625 487.147 140.956 479.984C143.824 475.21 148.844 470.866 154.112 468.135C159.376 465.405 165.084 464.177 170.693 464.552C179.075 465.152 187.672 463.309 195.572 459.213C214.418 449.442 222.574 431.23 219.127 417.121C216.275 405.46 206.323 396.984 193.181 394.993Z" fill="#FFF069" />
+                            <path d="M48.0901 397.315C41.5988 384.795 21.3946 369.972 9.69338 376.038C-2.00498 382.104 -1.5368 407.159 4.95452 419.679C11.139 431.607 25.8517 436.299 37.7411 430.135C49.6305 423.971 54.2746 409.243 48.0901 397.315Z" fill="#FFF069" />
+                            <path d="M161.389 297.387C149.691 303.453 150.159 328.508 156.65 341.028C162.835 352.956 177.548 357.648 189.437 351.484C201.326 345.32 205.971 330.592 199.786 318.664C193.295 306.143 173.091 291.321 161.389 297.387Z" fill="#FFF069" />
+                            <path d="M91.0765 320.114C97.2624 332.045 111.975 336.737 123.865 330.573C135.754 324.408 140.398 309.68 134.212 297.749C127.721 285.229 107.518 270.409 95.8169 276.476C84.1157 282.543 84.5852 307.594 91.0765 320.114Z" fill="#FFF069" />
+                            <path d="M58.4416 364.493C70.331 358.328 74.975 343.6 68.7891 331.669C62.2978 319.149 42.0922 304.331 30.3938 310.396C18.6926 316.463 19.1594 341.516 25.6507 354.036C31.8366 365.967 46.5493 370.658 58.4416 364.493Z" fill="#FFF069" />
+                            <path d="M270.71 120.51C259.919 118.892 251.977 114.788 247.177 109.448C229.295 89.4945 201.056 83.7191 179.539 94.8752C158.025 106.03 147.19 132.064 153.199 158.188C154.787 165.168 153.569 174.032 148.675 183.797C142.723 195.691 143.919 208.689 151.805 217.74C161.287 228.623 180.816 232.553 199.673 222.776C207.646 218.642 214.155 212.667 218.485 205.501C221.353 200.728 225.653 196.756 230.921 194.025C236.186 191.296 242.613 189.694 248.222 190.069C256.604 190.669 265.202 188.829 273.103 184.733C291.948 174.962 300.103 156.747 296.655 142.638C293.803 130.978 283.853 122.504 270.71 120.51Z" fill="#FFF069" />
+                            <path d="M125.621 122.831C119.129 110.311 98.9222 95.4891 87.2211 101.556C75.5227 107.621 75.9909 132.677 82.4822 145.197C88.6666 157.125 103.379 161.817 115.269 155.652C127.161 149.487 131.805 134.759 125.621 122.831Z" fill="#FFF069" />
+                            <path d="M238.918 22.9048C227.22 28.9701 227.688 54.0257 234.179 66.5457C240.364 78.4738 255.076 83.1657 266.966 77.0013C278.858 70.8355 283.502 56.1076 277.318 44.1794C270.826 31.6594 250.619 16.838 238.918 22.9048Z" fill="#FFF069" />
+                            <path d="M168.606 45.6344C174.79 57.5625 189.503 62.2544 201.392 56.09C213.282 49.9257 217.926 35.1977 211.741 23.2696C205.25 10.7496 185.046 -4.07325 173.345 1.99352C161.643 8.0603 162.114 33.1144 168.606 45.6344Z" fill="#FFF069" />
+                            <path d="M103.184 79.5544C109.368 91.4826 124.081 96.1745 135.97 90.0101C147.86 83.8457 152.504 69.1178 146.319 57.1897C139.828 44.6697 119.621 29.8483 107.922 35.9136C96.2213 41.9804 96.6922 67.0344 103.184 79.5544Z" fill="#FFF069" />
+                        </svg>
+
+                    </div>
+                </div>
+            </div >
+        )
+    }
+
+    const PerfilPage = props => {
+        //  Get data from storage first 
+        // const { userData, type } localstorage.getItem(TOKEN_KEY)
+        localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
+
+        return (
+            <div className="Perfil-container">
+                {userData.isDefault ? <p>Faça login cara de pastel</p> : <UserInfo />}
+            </div>
+        )
+    }
+
+    return (
+        <div id="Perfil">
+            <Topbar />
+            <PerfilPage />
+            <Footer />
+        </div>
+    )
+}
+
+
+
+
+
+export default Perfil;
