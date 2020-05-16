@@ -1,26 +1,55 @@
 import './Perfil.scss'
-import Topbar from '../../components/TopBar/TopBar';
+import TopBar from '../../components/TopBar/TopBar';
 import Footer from '../../components/Footer/Footer'
-import React, { useState } from 'react'
+import React from 'react'
 import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
+
+const InfoForm = ({ info }) => {
+    return (
+        <div key={info.label} className="info-row">
+            <p className="info-label">{info.label}</p>
+            <p className="info-data">{info.content}</p>
+            <button className="edit-btn" disabled={!info.editable}>
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+    )
+}
+
+const generateUserActions = actions => {
+    const actionList = actions.map(action => (
+        <a
+            href={action.ref} key={action.label} className="action-item"
+        >{action.label}</a>)
+    )
+
+    return (
+        <div className="action-list">
+            <h2>Compras</h2>
+            {actionList}
+        </div>
+    )
+}
+
+const generateAdminActions = actions => {    
+    const actionList = actions.map(action => (
+        <a
+            href={action.ref} key={action.label} className="action-item"
+        >{action.label}</a>)
+    )
+
+    return (
+        <div className="action-list" style={{ marginTop: '-5em' }}>
+            <h2>Ações</h2>
+            {actionList}
+        </div>
+    )
+}
 
 const Perfil = props => {
     const { userData, type, setUserByType } = React.useContext(UserCtx)
 
-    const InfoForm = ({ info }) => {
-        return (
-            <div key={info.label} className="info-row">
-                <p className="info-label">{info.label}</p>
-                <p className="info-data">{info.content}</p>
-                <button className="edit-btn" disabled={!info.editable}>
-                    <i class="fas fa-edit"></i>
-                </button>
-            </div>
-        )
-    }
-
     const generateUserInfo = userInfo => {
-        console.log(userInfo)
         const arrInfo = [
             {
                 label: 'Nome:',
@@ -58,45 +87,16 @@ const Perfil = props => {
     }
 
     const generateAdminInfo = userInfo => {
-        console.log(userInfo)
-        const arrInfo = [
-            {
-                label: 'Nome:',
-                content: userInfo.nome,
-                editable: true
-            },
-            {
-                label: 'Email:',
-                content: userInfo.email,
-                editable: true
-            },
-            {
-                label: 'Telefone:',
-                content: userInfo.telefone,
-                editable: true
-            },
-            {
-                label: 'Data de nascimento:',
-                content: userInfo.DataNascimento,
-                editable: true
-            },
-            {
-                label: 'Signo:',
-                content: userData.signo,
-                editable: false
-            }
-        ]
-
         return (
             <div className="info-box">
                 <h2 className="user-container-label">{userInfo.nome}</h2>
                 <p>{userInfo.email}</p>
             </div>
         )
-    }
+    }    
 
-    const generateUserActions = _ => {
-        const actions = [
+    const Profile = _ => {
+        const userActions = [
             {
                 label: "Histórico de compras",
                 ref: '/'
@@ -110,22 +110,7 @@ const Perfil = props => {
                 ref: '/'
             }
         ]
-        const actionList = actions.map(action => (
-            <a
-                href={action.ref} key={action.label} className="action-item"
-            >{action.label}</a>)
-        )
-
-        return (
-            <div className="action-list">
-                <h2>Compras</h2>
-                {actionList}
-            </div>
-        )
-    }
-
-    const generateAdminActions = _ => {
-        const actions = [
+        const AdminActions = [
             {
                 label: "Cadastrar novo admin",
                 ref: '/'
@@ -147,32 +132,16 @@ const Perfil = props => {
                 ref: '/'
             }
         ]
-        const actionList = actions.map(action => (
-            <a
-                href={action.ref} key={action.label} className="action-item"
-            >{action.label}</a>)
-        )
-
-        return (
-            <div className="action-list" style={{marginTop: '-5em'}}>
-                <h2>Ações</h2>
-                {actionList}
-            </div>
-        )
-    }
-
-    const UserInfo = _ => {
-        const [action, setAction] = React.useState(_ => generateUserActions)
+        const [action, setAction] = React.useState(generateUserActions(userActions))
         const [generateInfo, setgenerateInfo] = React.useState(_ => generateUserInfo)
 
         React.useEffect(() => {
             if (type === 'user') {
-                setgenerateInfo(_ => generateUserInfo)
-                setAction(_ => generateUserActions)
+                setgenerateInfo(generateUserInfo(userData))
+                setAction(_ => generateUserActions(userActions))
             } else {
-                setgenerateInfo(_ => generateAdminInfo)
-                setAction(_ => generateUserActions)
-                setAction(_ => generateAdminActions)
+                setgenerateInfo(generateAdminInfo(userData))
+                setAction(_ => generateAdminActions(AdminActions))
             }
 
         }, [type])
@@ -181,7 +150,7 @@ const Perfil = props => {
             <div className="Perfil-info">
                 <div className="user-data-container">
                     <div className="user-data-box">
-                        {generateInfo(userData)}
+                        {generateInfo}
                     </div>
                     <div className="foto-box">
                         <img src={userData.foto} alt="Foto de perfil" />
@@ -190,7 +159,7 @@ const Perfil = props => {
                 </div>
 
                 <div className="actions-container">
-                    {action()}
+                    {action}
                     <div className="patinha">
                         <svg width="150" viewBox="0 0 298 503" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M193.181 394.993C182.39 393.375 174.822 389.992 170.022 384.653C152.141 364.699 124.247 357.829 102.73 368.985C81.2152 380.14 70.0359 407.268 76.0449 433.392C77.6307 440.369 76.04 448.515 71.1452 458.276C65.1926 470.171 66.3902 483.172 74.275 492.219C83.7585 503.106 103.287 507.035 122.144 497.258C130.117 493.125 136.625 487.147 140.956 479.984C143.824 475.21 148.844 470.866 154.112 468.135C159.376 465.405 165.084 464.177 170.693 464.552C179.075 465.152 187.672 463.309 195.572 459.213C214.418 449.442 222.574 431.23 219.127 417.121C216.275 405.46 206.323 396.984 193.181 394.993Z" fill="#FFF069" />
@@ -211,29 +180,25 @@ const Perfil = props => {
         )
     }
 
-    const PerfilPage = props => {
+    const ProfilePage = props => {
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
         localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
 
         return (
             <div className="Perfil-container">
-                {userData.isDefault ? <p>Faça login cara de pastel</p> : <UserInfo />}
+                {userData.isDefault ? <p>Faça login cara de pastel</p> : <Profile />}
             </div>
         )
     }
 
     return (
         <div id="Perfil">
-            <Topbar />
-            <PerfilPage />
+            <TopBar />
+            <ProfilePage />
             <Footer />
         </div>
     )
 }
-
-
-
-
 
 export default Perfil;

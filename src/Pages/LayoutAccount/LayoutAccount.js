@@ -1,5 +1,5 @@
 import React from 'react';
-import Topbar from '../../components/TopBar/TopBar';
+import Topbar from '../../components/TopBar/TopBar'
 import './LayoutAccount.scss'
 import Footer from '../../components/Footer/Footer'
 import { Route, Switch, Redirect } from 'react-router-dom'
@@ -49,5 +49,3 @@ const LayoutAccount = props => {
 }
 
 export default LayoutAccount;
-
-

@@ -9,7 +9,6 @@ const HomePage = props => {
     return (
         <div className={"App"}>
             <Topbar />
-
             <ProductMenu title="Acessórios" />
             <Footer />
         </div>

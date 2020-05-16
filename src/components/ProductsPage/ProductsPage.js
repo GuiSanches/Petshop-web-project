@@ -5,6 +5,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
 import SectionProduct from '../SectionProduct/SectionProduct'
+import SectionBrands from '../SectionBrands/SectionBrands'
 import Promotions from '../Promotions/Promotions'
 import Atendimento from '../Atendimento/Atendimento'
 import Equipe from '../Equipe/Equipe'
@@ -26,6 +27,7 @@ const ProductsPage = () => {
             {/* <ProductsLeftMenu /> */}
             <Promotions />
             <div className="section-wrapper">
+                <SectionBrands title="Principais marcas"/>
                 <SectionProduct {...sessionsContent[0]} />
                 <SectionProduct {...sessionsContent[0]} />
             </div>
