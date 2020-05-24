@@ -29,7 +29,7 @@ export const UserCtx = React.createContext(defaultUserData)
 
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
-    const [type, setType] = React.useState('user')
+    const [type, setType] = React.useState('admin')
 
     const setUserAdmin = userData => {
         setType('admin')
@@ -43,7 +43,7 @@ export function UserContext(props) {
 
     const setUserByType = (type, data) => {
         if(type == 'user') setUserClient(data)
-        else setUserData(data)
+        else setUserAdmin(data)
     }
     return (
         <UserCtx.Provider value={{

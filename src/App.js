@@ -19,7 +19,7 @@ const App = () => {
       <UserContext>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/account*" component={LayoutAccount} />
-        <Route exact path="/perfil" component={PerfilPage} />
+        <Route exact path="/perfil*" component={PerfilPage} />
         <Route exact path="/produtos" component={ProductPage} />
         <Route exact path="/registro" component={RegistroPet} />
         <Route exact path="/sobrenos" component={SobrenosPage} />

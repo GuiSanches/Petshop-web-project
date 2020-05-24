@@ -11,7 +11,7 @@ const LayoutAccount = props => {
     const benefits = "Só na Pedrigui's você encontra tudo o que precisa para o bem estar do seu pet. E só os membros da Pedrigui's encontram os melhores preços e benefícios."
     const topics = [
         "Tenha acesso a consultas veterinária, banho e tosa e a Petshop mais completa em um só lugar",
-        "Acompanhe seu pet de perto. Tenha o registro completo de como anda a saúde do seu bichinho",
+        "Acompanhe seu pet de perto tendo o registro completo de como anda a saúde do seu bichinho",
         "Oferecemos diversos descontos para nossos petlovers"
     ]
 

@@ -2,7 +2,13 @@ import './Perfil.scss'
 import TopBar from '../../components/TopBar/TopBar';
 import Footer from '../../components/Footer/Footer'
 import React from 'react'
+import { Route, Switch, Redirect, Link } from 'react-router-dom'
 import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
+
+import BoxLog from '../../components/BoxLog/BoxLog'
+import InventoryBoxLog from '../../components/BoxLog/InventoryBoxLog'
+import HistoryBoxLog from '../../components/BoxLog/HistoryBoxLog'
+import Agendamentos from '../../components/Agendamentos/Agendamentos'
 
 const InfoForm = ({ info }) => {
     return (
@@ -18,9 +24,9 @@ const InfoForm = ({ info }) => {
 
 const generateUserActions = actions => {
     const actionList = actions.map(action => (
-        <a
-            href={action.ref} key={action.label} className="action-item"
-        >{action.label}</a>)
+        <Link
+            to={action.ref} key={action.label} className="action-item"
+        >{action.label}</Link>)
     )
 
     return (
@@ -31,7 +37,7 @@ const generateUserActions = actions => {
     )
 }
 
-const generateAdminActions = actions => {    
+const generateAdminActions = actions => {
     const actionList = actions.map(action => (
         <a
             href={action.ref} key={action.label} className="action-item"
@@ -93,13 +99,13 @@ const Perfil = props => {
                 <p>{userInfo.email}</p>
             </div>
         )
-    }    
+    }
 
     const Profile = _ => {
         const userActions = [
             {
                 label: "Histórico de compras",
-                ref: '/'
+                ref: '/perfil/historico-compras'
             },
             {
                 label: "Agendamentos",
@@ -181,13 +187,53 @@ const Perfil = props => {
     }
 
     const ProfilePage = props => {
+        const [class_, setClass_] = React.useState("");
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
         localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
-
+        const headerLabels = [
+            'Em estoque',
+            'Item',
+            'Nome',
+            'Qtd',
+            'Preço'
+        ]
+        const headerLabelsHistory = [
+            'Data',
+            'Item',
+            'Nome',
+            'Qtd',
+            'Preço'
+        ]
+        const headerLabelsInventory = [
+            'Código',
+            'Item',
+            'Nome',
+            'Qtd',
+            'Preço Un'
+        ]
         return (
-            <div className="Perfil-container">
-                {userData.isDefault ? <p>Faça login cara de pastel</p> : <Profile />}
+            <div className={`Perfil-container ${class_}`}>
+                {userData.isDefault ? <p>Faça login cara de pastel</p> :
+                    <Switch>
+                        <Route exact path="/perfil/carrinho-compras">
+                            <BoxLog title="Carrinho de compras" headerLabels={headerLabels} />
+                        </Route>
+                        <Route exact path="/perfil/historico-compras">
+                            <HistoryBoxLog title="Historico de compras" headerLabels={headerLabelsHistory} />
+                        </Route>
+                        <Route exact path="/perfil/inventario">
+                            <InventoryBoxLog title="Inventário" headerLabels={headerLabelsInventory} />
+                        </Route>
+                        <Route exact path="/perfil/agendamentos">
+                            <Agendamentos title="Inventário" changeFather={setClass_} />
+                        </Route>
+                        <Route path="/">
+                            <Profile />
+                        </Route>
+                        {/* <Redirect path="/perfil" exact to="/account/login" />  */}
+                    </Switch>
+                }
             </div>
         )
     }

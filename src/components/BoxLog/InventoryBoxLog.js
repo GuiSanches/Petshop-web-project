@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './BoxLog.scss'
 import { Link } from 'react-router-dom'
 
+
 const generateList = array => array.map(row => generateItem(row))
 
 const generateItem = array => (
@@ -13,11 +14,11 @@ const generateItem = array => (
 
 
 const item = [
-    '47 unidades',
+    '12345',
     <i class="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
-    'Nome',
-    'Qtd',
-    'Preço'
+    'Conjunto Completo',
+    '22',
+    'R$ 119, 90'
 ]
 
 const items = Array.from({ length: 7 }).fill(item)
@@ -41,10 +42,15 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                     </div>
 
                     <div className="box-action">
-                        <h3>Preço estimado: R$ 360.00</h3>
-                        <div className="buy-items">
+                        <div className="inventory-actions">
                             <button id="buy-store">
-                                Comprar
+                                Editar produto
+                            </button>
+                            <button id="buy-store">
+                                Add produto
+                            </button>
+                            <button id="buy-store">
+                                Deletar produto
                             </button>
 
                         </div>
@@ -53,9 +59,6 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 </div>
 
             </div>
-            <div id="teste">                
-            </div>
-
         </div>
     )
 }
