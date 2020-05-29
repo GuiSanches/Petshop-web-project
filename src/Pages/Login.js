@@ -8,12 +8,16 @@ const LoginPage = props => {
     // const { userData } = React.useContext(UserCtx)
 
     const Login = _ => {
+        const handleSubmit = e => {
+            e.preventDefault()
+            window.location.href = '/perfil'
+        }
         return (
             <div className="acc-box">
                 <div className="acc">
                     <p>Pedrigui's com você de P a I</p>
                     <h1>Login</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <input type="email" placeholder="E-mail" />
                         <input type="password" placeholder="Senha" />
                         <a href="">Esqueceu sua senha?</a>

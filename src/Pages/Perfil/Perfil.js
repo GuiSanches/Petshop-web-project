@@ -9,6 +9,8 @@ import BoxLog from '../../components/BoxLog/BoxLog'
 import InventoryBoxLog from '../../components/BoxLog/InventoryBoxLog'
 import HistoryBoxLog from '../../components/BoxLog/HistoryBoxLog'
 import Agendamentos from '../../components/Agendamentos/Agendamentos'
+import AddClient from '../../components/AddClient/AddClient'
+import AddAdmin from '../../components/AddAdmin/AddAdmin';
 
 const InfoForm = ({ info }) => {
     return (
@@ -109,7 +111,7 @@ const Perfil = props => {
             },
             {
                 label: "Agendamentos",
-                ref: '/'
+                ref: '/perfil/agendamentos'
             },
             {
                 label: "Registro de pet",
@@ -119,15 +121,15 @@ const Perfil = props => {
         const AdminActions = [
             {
                 label: "Cadastrar novo admin",
-                ref: '/'
+                ref: '/perfil/cadastrar-adm'
             },
             {
                 label: "Cadastrar Cliente",
-                ref: '/'
+                ref: '/perfil/cadastrar-cliente'
             },
             {
                 label: "Inventário",
-                ref: '/'
+                ref: '/perfil/inventario'
             },
             {
                 label: "Adicionar novo serviço",
@@ -135,7 +137,7 @@ const Perfil = props => {
             },
             {
                 label: "Meus agendamentos",
-                ref: '/'
+                ref: '/perfil/agendamentos'
             }
         ]
         const [action, setAction] = React.useState(generateUserActions(userActions))
@@ -222,12 +224,24 @@ const Perfil = props => {
                         <Route exact path="/perfil/historico-compras">
                             <HistoryBoxLog title="Historico de compras" headerLabels={headerLabelsHistory} />
                         </Route>
-                        <Route exact path="/perfil/inventario">
-                            <InventoryBoxLog title="Inventário" headerLabels={headerLabelsInventory} />
-                        </Route>
                         <Route exact path="/perfil/agendamentos">
                             <Agendamentos title="Inventário" changeFather={setClass_} />
                         </Route>
+                        {type == 'admin' &&
+                            <Route exact path="/perfil/cadastrar-cliente">
+                                <AddClient title="Cadastro" />
+                            </Route>
+                        }
+                        {type == 'admin' &&
+                            <Route exact path="/perfil/inventario">
+                                <InventoryBoxLog title="Inventário" headerLabels={headerLabelsInventory} />
+                            </Route>
+                        }
+                        {type == 'admin' &&
+                            <Route exact path="/perfil/cadastrar-adm">
+                                <AddAdmin title="Cadastro" />
+                            </Route>
+                        }
                         <Route path="/">
                             <Profile />
                         </Route>

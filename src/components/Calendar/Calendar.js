@@ -25,13 +25,15 @@ export default class DemoApp extends React.Component {
   componentDidMount() {
     this.calendar = this.calendarComponentRef.current.calendar
     this.calendar.setOption('locale', 'pt-BR')
-    console.log(this.calendarComponentRef.current, 'i')
-    console.log(this.calendarComponentRef.current.calendar.events)
+    this.eventsLen = this.state.calendarEvents.length
+    // console.log(this.calendarComponentRef.current, 'i')
+    // console.log(this.calendarComponentRef.current.calendar.events)
 
   }
 
 
   render() {
+    // console.log(this.props)
     return (
       <div className="demo-app">
         <div className="demo-app-top">
@@ -70,15 +72,26 @@ export default class DemoApp extends React.Component {
     calendarApi.gotoDate("2000-01-01"); // call a method on the Calendar object
   };
 
+  parseDate(date) {
+    return {
+      day: date.getDate(),
+      month: date.getMonth(),
+      year: date.getFullYear(),
+      hour: date.getHours(),
+      min: date.getMinutes()
+    }
+  }
+
   handleDateClick = arg => {
     if (this.calendar.state.viewType == "dayGridMonth")
       this.calendar.changeView('timeGridDay', arg.date)
     else if (true) {
+      this.props.handleBook(this.parseDate(new Date(arg.date)))
       this.setState({
         // add new event data
-        calendarEvents: this.state.calendarEvents.concat({
+        calendarEvents: this.state.calendarEvents.slice(0, this.eventsLen).concat({
           // creates a new array
-          title: "Consulta",
+          title: "Reservado",
           start: arg.date,
           allDay: arg.allDay
         })
