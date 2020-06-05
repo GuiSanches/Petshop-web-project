@@ -21,7 +21,7 @@ const Equipe = ({ title }) => {
         (member,i) => (
             <div key={'member' + i} className="member">
                 <div className="member-img">
-                    <img src={member.img} />
+                    <img src={member.img} alt={"member foto"} />
                 </div>
                 <div className="member-content">
                     <h3>{member.name}</h3>

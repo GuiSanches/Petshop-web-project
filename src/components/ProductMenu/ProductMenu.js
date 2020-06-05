@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import './ProductMenu.scss';
 import Dropdown from '../Dropdown/Dropdown'
 // get our fontawesome imports

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './BoxLog.scss'
 import { Link } from 'react-router-dom'
+import db from '../../components/Db/Db'
 
 const generateList = array => array.map(row => generateItem(row))
 
@@ -27,6 +28,8 @@ const generateBoxHeader = labels => labels.map(
 )
 
 const BoxLog = ({ title, headerLabels, getData }) => {
+    const [items_, setItems_] = React.useState(null)
+    
     return (
         <div className="box-info">
             <div className="box-container">

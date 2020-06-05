@@ -1,9 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './BoxLog.scss'
-import { Link } from 'react-router-dom'
+import Db from '../Db/Db'
+import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
 
+const generateList = arrayProducts => arrayProducts.map(el => {
+    const commomProducts = {
+        item: <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
+        Nome: el.Nome,
+    }
 
-const generateList = array => array.map(row => generateItem(row))
+    const rowItemData = el.history.map(item => ({
+        Data: new Date(item.Date),
+        item: commomProducts.item,
+        Nome: commomProducts.Nome,
+        Qtd: item.Qtd,
+        Price: item.Price
+    }))
+
+    return rowItemData.map(r => generateRow(r))
+})
+
+const generateRow = rowData => {
+    const RowArray = [
+        rowData.Data.toLocaleDateString('pt-BR'),
+        rowData.item,
+        rowData.Nome,
+        rowData.Qtd,
+        `R$ ${rowData.Price['$numberDecimal']}`
+    ]
+
+    return generateItem(RowArray)
+}
 
 const generateItem = array => (
     <>
@@ -15,19 +42,31 @@ const generateItem = array => (
 
 const item = [
     '47 unidades',
-    <i class="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
+    <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
     'Nome',
     'Qtd',
     'Preço'
 ]
 
-const items = Array.from({length: 7}).fill(item)
+const items = Array.from({ length: 7 }).fill(item)
 
 const generateBoxHeader = labels => labels.map(
     label => <div>{label}</div>
 )
 
 const BoxLog = ({ title, headerLabels, getData }) => {
+    const [cart, setCart] = React.useState(null)
+    const [loading, setLoading] = React.useState(true)
+    const { userData, type } = React.useContext(UserCtx)
+
+    React.useEffect(() => {
+        if (userData._id && loading) {
+            Db.getProductsShopLog(userData._id).then(e => {
+                setCart(e)
+                setLoading(false)
+            })
+        }
+    }, [loading])
     return (
         <div className="box-info">
             <div className="box-container">
@@ -37,7 +76,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 <div className="box-grid-container">
                     <div className="box-grid"> {/* Grid */}
                         {generateBoxHeader(headerLabels)}
-                        {generateList(items)}
+                        {loading ? 'carregando amigo' : generateList(cart)}
 
                     </div>
 

@@ -2,7 +2,7 @@ import './Perfil.scss'
 import TopBar from '../../components/TopBar/TopBar';
 import Footer from '../../components/Footer/Footer'
 import React from 'react'
-import { Route, Switch, Redirect, Link } from 'react-router-dom'
+import { Route, Switch, Link } from 'react-router-dom'
 import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
 
 import BoxLog from '../../components/BoxLog/BoxLog'
@@ -12,13 +12,15 @@ import Agendamentos from '../../components/Agendamentos/Agendamentos'
 import AddClient from '../../components/AddClient/AddClient'
 import AddAdmin from '../../components/AddAdmin/AddAdmin';
 
+
+
 const InfoForm = ({ info }) => {
     return (
         <div key={info.label} className="info-row">
             <p className="info-label">{info.label}</p>
             <p className="info-data">{info.content}</p>
             <button className="edit-btn" disabled={!info.editable}>
-                <i class="fas fa-edit"></i>
+                <i className="fas fa-edit"></i>
             </button>
         </div>
     )
@@ -57,31 +59,36 @@ const generateAdminActions = actions => {
 const Perfil = props => {
     const { userData, type, setUserByType } = React.useContext(UserCtx)
 
+    const parseDate = date => {
+
+    }
     const generateUserInfo = userInfo => {
+        const birth = new Date(userInfo.Nascimento)
+        const signos = ['Aquário', 'Peixes', 'Áries', 'Touro', 'Gêmeos', 'Câncer', 'Leão', 'Virgem', 'Libra', 'Escorpião', 'Sagitário', 'Capricórnio']
         const arrInfo = [
             {
                 label: 'Nome:',
-                content: userInfo.nome,
+                content: userInfo.Nome,
                 editable: true
             },
             {
                 label: 'Email:',
-                content: userInfo.email,
+                content: userInfo.Email,
                 editable: true
             },
             {
                 label: 'Telefone:',
-                content: userInfo.telefone,
+                content: userInfo.Telefone,
                 editable: true
             },
             {
                 label: 'Data de nascimento:',
-                content: userInfo.DataNascimento,
+                content: birth.toLocaleDateString('pt-BR'),
                 editable: true
             },
             {
                 label: 'Signo:',
-                content: userData.signo,
+                content: signos[birth.getMonth() - 1],
                 editable: false
             }
         ]
@@ -89,7 +96,7 @@ const Perfil = props => {
         return (
             <div className="info-box">
                 <h2 className="user-container-label">Sobre</h2>
-                {arrInfo.map(info => <InfoForm info={info} />)}
+                {arrInfo.map((info, i) => <InfoForm key={info + i} info={info} />)}
             </div>
         )
     }
@@ -141,7 +148,7 @@ const Perfil = props => {
             }
         ]
         const [action, setAction] = React.useState(generateUserActions(userActions))
-        const [generateInfo, setgenerateInfo] = React.useState(_ => generateUserInfo)
+        const [generateInfo, setgenerateInfo] = React.useState('vazio')
 
         React.useEffect(() => {
             if (type === 'user') {
@@ -161,7 +168,7 @@ const Perfil = props => {
                         {generateInfo}
                     </div>
                     <div className="foto-box">
-                        <img src={userData.foto} alt="Foto de perfil" />
+                        <img src={require(`../../Images/users/${userData.Foto}`)} alt="Foto de perfil" />
                         <p>Alterar foto de perfil</p>
                     </div>
                 </div>
@@ -192,7 +199,7 @@ const Perfil = props => {
         const [class_, setClass_] = React.useState("");
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
-        localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
+        // localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
         const headerLabels = [
             'Em estoque',
             'Item',
@@ -227,17 +234,17 @@ const Perfil = props => {
                         <Route exact path="/perfil/agendamentos">
                             <Agendamentos title="Inventário" changeFather={setClass_} />
                         </Route>
-                        {type == 'admin' &&
+                        {type === 'admin' &&
                             <Route exact path="/perfil/cadastrar-cliente">
                                 <AddClient title="Cadastro" />
                             </Route>
                         }
-                        {type == 'admin' &&
+                        {type === 'admin' &&
                             <Route exact path="/perfil/inventario">
                                 <InventoryBoxLog title="Inventário" headerLabels={headerLabelsInventory} />
                             </Route>
                         }
-                        {type == 'admin' &&
+                        {type === 'admin' &&
                             <Route exact path="/perfil/cadastrar-adm">
                                 <AddAdmin title="Cadastro" />
                             </Route>

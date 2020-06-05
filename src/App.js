@@ -3,10 +3,10 @@ import React from 'react';
 import './App.scss';
 import { Route, Switch, Redirect } from 'react-router-dom'
 import HomePage from './Pages/Home'
-import LoginPage from './Pages/Login'
+// import LoginPage from './Pages/Login'
 import PerfilPage from './Pages/Perfil/Perfil'
 import LayoutAccount from './Pages/LayoutAccount/LayoutAccount'
-import CadastroPage from './Pages/Cadastro/Cadastro'
+// import CadastroPage from './Pages/Cadastro/Cadastro'
 import { UserContext } from './components/context/UserCtx'
 import ProductPage from './Pages/Products/Products'
 import RegistroPet from './components/registroPet/registroPet';

@@ -1,9 +1,9 @@
 import React from 'react';
 import './ProductsPage.scss';
 // get our fontawesome imports
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
 import SectionProduct from '../SectionProduct/SectionProduct'
 import SectionBrands from '../SectionBrands/SectionBrands'
 import Promotions from '../Promotions/Promotions'

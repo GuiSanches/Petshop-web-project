@@ -1,10 +1,10 @@
 import React from 'react';
 import './SectionProduct.scss';
-import logo from '../../Images/logo.png'
+// import logo from '../../Images/logo.png'
 // get our fontawesome imports
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import ProductsLeftMenu from '../ProductsLeftMenu/ProductsLeftMenu'
 
 const SectionProduct = props => {
     const { sessionTitle, cards } = props

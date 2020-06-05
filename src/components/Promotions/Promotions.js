@@ -93,7 +93,7 @@ const Promotions = props => {
 
 const generateCards = (cards, selectedGrid) => cards.map(
     (card, i) => (
-        <div className="p-card" key={card + i} style={i == selectedGrid ? { height: '350px' } : {}}>
+        <div className="p-card" key={card + i} style={i === selectedGrid ? { height: '350px' } : {}}>
             <div className="p-card-wrap">
                 <h3 className="p-card-title">{card.title}</h3>
                 <div className="p-card-content">

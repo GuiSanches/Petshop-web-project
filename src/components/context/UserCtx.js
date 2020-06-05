@@ -1,35 +1,47 @@
 import React from 'react'
-import wxDL6es from '../../Images/Imagens uteis/wxDL6es.jpg'
-
 export const TOKEN_KEY = "Petshop";
 
 const commonData = {
     id: 0,
     logged: true,
-    nome: 'Pedro',
-    email: 'exemplo@exemplo.com',
-    foto: wxDL6es,
+    Nome: 'Pedro',
+    Email: 'exemplo@exemplo.com',
+    Foto: 'marcos.jpg',
     token: TOKEN_KEY,
-    DataNascimento: '17/09/2000'
+    Nascimento: '17/09/2000'
 }
 
 const defaultUserData = {
     isDefault: false,
-    telefone: '9999999999',
+    Telefone: '9999999999',
     signo: 'leaozinho',
+    Animais: [],
     ...commonData
 }
 
 const defaultAdminData = {
     DataNascimento: '17/09/2000',
     ...commonData
-  }
+}
 
 export const UserCtx = React.createContext(defaultUserData)
+const matches = (obj, source) =>
+  Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
 
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
-    const [type, setType] = React.useState('admin')
+    const [load, setLoaded] = React.useState(false)
+    const [type, setType] = React.useState('user')
+
+    React.useEffect(_ => {
+        let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
+        if (!load && user) {
+            user = user.user
+            setUserData(user)
+            setLoaded(true)
+        }
+        
+    }, [load])
 
     const setUserAdmin = userData => {
         setType('admin')
@@ -39,10 +51,12 @@ export function UserContext(props) {
     const setUserClient = userData => {
         setType('user')
         setUserData(userData)
+        console.log(userData)
     }
 
     const setUserByType = (type, data) => {
-        if(type == 'user') setUserClient(data)
+        console.log('ola mundo')
+        if (type === 'user') setUserClient(data)
         else setUserAdmin(data)
     }
     return (

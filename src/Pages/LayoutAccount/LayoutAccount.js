@@ -1,13 +1,12 @@
 import React from 'react';
 import Topbar from '../../components/TopBar/TopBar'
 import './LayoutAccount.scss'
-import Footer from '../../components/Footer/Footer'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import Cadastro from '../Cadastro/Cadastro'
 import Login from '../Login'
 
 const LayoutAccount = props => {
-    const slogan = "Pedrigui's a clinica veterina e petshop mais completa que você ja viu"
+    // const slogan = "Pedrigui's a clinica veterina e petshop mais completa que você ja viu"
     const benefits = "Só na Pedrigui's você encontra tudo o que precisa para o bem estar do seu pet. E só os membros da Pedrigui's encontram os melhores preços e benefícios."
     const topics = [
         "Tenha acesso a consultas veterinária, banho e tosa e a Petshop mais completa em um só lugar",

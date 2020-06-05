@@ -83,7 +83,7 @@ export default class DemoApp extends React.Component {
   }
 
   handleDateClick = arg => {
-    if (this.calendar.state.viewType == "dayGridMonth")
+    if (this.calendar.state.viewType === "dayGridMonth")
       this.calendar.changeView('timeGridDay', arg.date)
     else if (true) {
       this.props.handleBook(this.parseDate(new Date(arg.date)))

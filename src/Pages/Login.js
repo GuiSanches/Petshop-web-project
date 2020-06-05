@@ -1,16 +1,35 @@
 import React from 'react';
-import Topbar from '../components/TopBar/TopBar';
 import './Login.scss'
-import Footer from '../components/Footer/Footer'
-// import { UserCtx } from '../components/context/UserCtx'
-
+import db from '../components/Db/Db'
+import { UserCtx, TOKEN_KEY } from '../components/context/UserCtx'
+import { useHistory } from "react-router-dom";
 const LoginPage = props => {
-    // const { userData } = React.useContext(UserCtx)
+    const { userData, setUserByType } = React.useContext(UserCtx)
+
+    const history = useHistory();
+    if (userData._id) history.push("/perfil");
 
     const Login = _ => {
-        const handleSubmit = e => {
+        const [email, setEmail] = React.useState('')
+        const [password, setPassword] = React.useState('')
+        const history = useHistory();
+
+        const handlePasswordChange = e => {
+            setPassword(e.target.value)
+        }
+
+        const handleEmailChange = e => {
+            setEmail(e.target.value)
+        }
+        const handleSubmit = async e => {
             e.preventDefault()
-            window.location.href = '/perfil'
+            console.log(email, password)
+            let user = await db.signIn(email, password)
+            if (user) {
+                setUserByType('user', user)
+                localStorage.setItem(TOKEN_KEY, JSON.stringify({ user, type: 'user' }))
+            }
+            history.push("/perfil");
         }
         return (
             <div className="acc-box">
@@ -18,8 +37,10 @@ const LoginPage = props => {
                     <p>Pedrigui's com você de P a I</p>
                     <h1>Login</h1>
                     <form onSubmit={handleSubmit}>
-                        <input type="email" placeholder="E-mail" />
-                        <input type="password" placeholder="Senha" />
+                        <input type="email" placeholder="E-mail"
+                            value={email} onChange={handleEmailChange} />
+                        <input type="password" placeholder="Senha"
+                            value={password} onChange={handlePasswordChange} />
                         <a href="">Esqueceu sua senha?</a>
 
                         <div className="form-btn">

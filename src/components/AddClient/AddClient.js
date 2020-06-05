@@ -1,6 +1,4 @@
 import React from 'react';
-import Topbar from '../../components/TopBar/TopBar';
-import Footer from '../../components/Footer/Footer'
 // import { UserCtx } from '../components/context/UserCtx'
 
 
