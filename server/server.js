@@ -1,9 +1,6 @@
-const db = require('./db');
-
 const express = require('express')
 const bodyParser = require('body-parser')
-const path = require('path');
-const cors = require('cors')
+const db = require('./db');
 
 const server = async () => {
     const app = express()
@@ -28,7 +25,6 @@ const server = async () => {
     app.use(bodyParser.json());
 
     app.listen(PORT, () => {
-        // db()
         console.log(`server running on port ${PORT}`)
     })
 
@@ -37,7 +33,7 @@ const server = async () => {
         res.send({ PetGui: 'Sucesso, bem vindo a melhor petshop do BRASIL!' })
     })
 
-    app.post('/login', async (req, res, next) => {
+    app.get('/login', async (req, res, next) => {
         const { email, password } = req.body;
         try {
             await db.initialize()
@@ -78,13 +74,57 @@ const server = async () => {
         }
     })
 
-    app.post('/products-cart/:id', async (req, res, next) => {
+    app.get('/products-cart/:id', async (req, res, next) => {
         try {
             await db.initialize()
             let resp = await db.getCartById(req.params.id)
+
+            res.send(resp)
+            await db.destroy()
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.get('/products', async (req, res, next) => {
+        try {
+            console.log('oi')
+            await db.initialize()
+
+            let resp = await db.getProducts()
+            console.log(resp)
+
             await db.destroy()
             res.send(resp)
+
         } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.post('/book-appointment', async (req, res, next) => {
+        const data = req.body
+
+        try {
+            await db.initialize()
+            let resp = await db.bookAppointment(data)
+            console.log(resp)
+            await db.destroy()
+            res.send(resp)
+
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.get('/all-book', async (req, res, next) => {
+        try {
+            await db.initialize()
+            const resp = await db.getAllFutureBook()
+            console.log(resp)
+            await db.destroy()
+            res.send(resp)
+        }catch(e) {
             console.log(e)
         }
     })

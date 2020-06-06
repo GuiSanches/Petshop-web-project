@@ -1,24 +1,49 @@
 import React from 'react';
 import './ProductMenu.scss';
 import Dropdown from '../Dropdown/Dropdown'
+import api from '../Db/Db'
 // get our fontawesome imports
 
 const ProductsPage = ({ title }) => {
     const defaultCards = Array.from(
         { length: 9 },
         () => ({
-            name: 'Brinquedo 1',
+            name: 'Produto',
             price: '6,90',
             link: '#',
-            image: 'dog-food.svg'
+            Foto: 'dog-food.svg'
         })
     )
     const [cards, setCards] = React.useState(defaultCards)
+    const [loading, setLoading] = React.useState(true)
+    const [cardsBack, setCardsBack] = React.useState(null)
+
+    React.useEffect(() => {
+        if (loading) {
+            api.getProducts().then(res => {
+                setCardsBack(res
+                    .map(res => ({
+                        ...res,
+                        name: res.Nome,
+                        price: res.Preco['$numberDecimal'],
+                        link: '#',
+                        Foto: res.Foto,                        
+                    })
+                    ))                
+                setLoading(false)
+            }).catch(e => console.log(e))
+        }
+    }, [loading])
+
+    React.useEffect(() => {
+        console.log(cardsBack)
+    }, [cardsBack])
+
     return (
         <div className="Products-container">
             <h1 className="Products-title">{title}</h1>
             <SearchProduct />
-            <ProductsGrid cards={cards} />
+            <ProductsGrid cards={cardsBack} />
         </div>
     );
 }
@@ -121,7 +146,7 @@ const ProductsGrid = ({ cards }) => {
             <div className="product-grid-item" key={card.name}>
                 <div className="P-card-product">
                     <div className="product-image">
-                        <img src={require(`../../Images/Icones/${card.image}`)} alt="Imagem produto" />
+                        <img src={require(`../../Images/Icones/${card.Foto}`)} alt="Imagem produto" />
                     </div>
                     <div className="product-info">
                         <p>{card.name}</p>
@@ -138,7 +163,7 @@ const ProductsGrid = ({ cards }) => {
     return (
         <div className="cards-p-container">
             <div className="cards-grid">
-                {cards.map(card => <ProductCard card={card} />)}
+                {cards == null ? 'Carregando...' :cards.map(card => <ProductCard card={card} />)}
             </div>
         </div>
     )

@@ -14,7 +14,7 @@ axios.defaults.crossDomain = true;
 
 const backend = {
     signIn: async (email, password) => {
-        const resp = await api.post('/login', {
+        const resp = await api.get('/login', {
             email,
             password
         })
@@ -22,14 +22,31 @@ const backend = {
         return resp.data
     },
     signUp: async(userData) => {
-
         const resp = await api.post('/create-user', userData)
-        console.log(userData)
+        return resp.data
     },
     getProductsShopLog: async(userID) => {
 
-        const resp = await api.post(`/products-cart/${userID}`)
+        const resp = await api.get(`/products-cart/${userID}`)
         
+        return resp.data
+    },
+
+    getProducts: async _ => {
+        const resp = await api.get(`/products`)
+
+        return resp.data
+    },
+
+    bookAppointment: async (ClientData, PetData) => {
+        const resp = await api.post('/book-appointment',{ClientData, PetData})
+
+        return resp.data
+    },
+
+    getAllFutureAppointments: async _ => {
+        const resp = await api.get('/all-book')
+
         return resp.data
     }
 }

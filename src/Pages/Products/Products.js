@@ -2,6 +2,7 @@ import React from 'react';
 import Topbar from '../../components/TopBar/TopBar';
 import ProductMenu from '../../components/ProductMenu/ProductMenu'
 import Footer from '../../components/Footer/Footer'
+import './Products.scss'
 
 const HomePage = props => {
     // const [] =  get url params

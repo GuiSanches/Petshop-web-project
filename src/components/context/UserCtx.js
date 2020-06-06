@@ -39,8 +39,7 @@ export function UserContext(props) {
             user = user.user
             setUserData(user)
             setLoaded(true)
-        }
-        
+        }        
     }, [load])
 
     const setUserAdmin = userData => {
@@ -51,11 +50,9 @@ export function UserContext(props) {
     const setUserClient = userData => {
         setType('user')
         setUserData(userData)
-        console.log(userData)
     }
 
     const setUserByType = (type, data) => {
-        console.log('ola mundo')
         if (type === 'user') setUserClient(data)
         else setUserAdmin(data)
     }

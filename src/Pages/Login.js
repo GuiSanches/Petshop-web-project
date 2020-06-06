@@ -23,7 +23,6 @@ const LoginPage = props => {
         }
         const handleSubmit = async e => {
             e.preventDefault()
-            console.log(email, password)
             let user = await db.signIn(email, password)
             if (user) {
                 setUserByType('user', user)

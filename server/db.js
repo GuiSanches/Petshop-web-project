@@ -5,23 +5,6 @@ const ObjectID = require('mongodb').ObjectID
 let client;
 let db;
 
-// const db = async _ => {
-
-//     const MongoClient = require('mongodb').MongoClient;
-
-//     const uri = "mongodb+srv://petshop:admim@cluster0-il6hs.mongodb.net/petshop?retryWrites=true&w=majority";
-
-//     const client = new MongoClient(uri, { useUnifiedTopology: true });
-
-//     client.connect(err => {
-//         const collection = client.db("petshop").collection("users");
-//         // perform actions on the collection object
-//         assert.equal(null, err);
-//         console.log("Connected successfully to server", collection);
-//         client.close();
-//     });
-// }
-
 const initialize = async _ => {
     const uri = "mongodb+srv://petshop:admim@cluster0-il6hs.mongodb.net/petshop?retryWrites=true&w=majority";
 
@@ -72,11 +55,41 @@ const getCartById = async (userID) => {
     })
 }
 
+const getProducts = async _ => {
+    return db.collection('produtos').find({}).toArray()
+}
+
+const getAllFutureBook = async _ => {
+    try {
+        let resp = await db.collection('consultas').find({
+            Data: {
+                $gte: new Date()
+            }
+        }).toArray()
+        return resp
+    } catch (e) {
+        return e
+    }
+}
+
+const bookAppointment = async ({ ClientData, PetData }) => {
+    return db.collection('consultas').insertOne({
+        Cliente: new ObjectID(ClientData.id),
+        Veterinario: new ObjectID('5ed960d4caaf62cc4627eb7c'),
+        Animal: PetData.petName,
+        Data: new Date(ClientData.Date),
+        Descricao: PetData.reason
+    })
+}
+
 module.exports = {
     initialize,
     signIn,
     signUp,
     getCartById,
+    getProducts,
+    bookAppointment,
+    getAllFutureBook,
     destroy
 }
 

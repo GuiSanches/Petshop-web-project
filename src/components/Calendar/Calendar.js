@@ -13,22 +13,39 @@ import "@fullcalendar/timegrid/main.css";
 
 export default class DemoApp extends React.Component {
   calendarComponentRef = React.createRef();
-
   state = {
     calendarWeekends: true,
     calendarEvents: [
       // initial event data
-      { title: "Event Nossw", start: new Date() }
+      { title: "Carregando :)", start: new Date() }
     ]
   };
 
   componentDidMount() {
     this.calendar = this.calendarComponentRef.current.calendar
     this.calendar.setOption('locale', 'pt-BR')
-    this.eventsLen = this.state.calendarEvents.length
+    this.eventsLen = this.state.calendarEvents.length;
     // console.log(this.calendarComponentRef.current, 'i')
     // console.log(this.calendarComponentRef.current.calendar.events)
+  }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.Events !== this.props.Events)
+      if (this.props.Events.length > 0) {
+        let calendarEvents = this.props.Events.map(e => ({
+          title: 'Já Reservado',
+          start: e.Data,
+          url: `:${e.Cliente}`,
+          color: '#FDF2BB',
+          textColor: '#3333333',
+          ...e
+        }))
+
+        this.setState(
+          { calendarEvents }
+        )
+        this.eventsLen = calendarEvents.length;
+      }
   }
 
 
@@ -91,7 +108,7 @@ export default class DemoApp extends React.Component {
         // add new event data
         calendarEvents: this.state.calendarEvents.slice(0, this.eventsLen).concat({
           // creates a new array
-          title: "Reservado",
+          title: "Reservar",
           start: arg.date,
           allDay: arg.allDay
         })

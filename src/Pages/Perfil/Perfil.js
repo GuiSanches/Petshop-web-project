@@ -11,6 +11,7 @@ import HistoryBoxLog from '../../components/BoxLog/HistoryBoxLog'
 import Agendamentos from '../../components/Agendamentos/Agendamentos'
 import AddClient from '../../components/AddClient/AddClient'
 import AddAdmin from '../../components/AddAdmin/AddAdmin';
+import api from '../../components/Db/Db'
 
 
 
@@ -197,6 +198,7 @@ const Perfil = props => {
 
     const ProfilePage = props => {
         const [class_, setClass_] = React.useState("");
+        const [events, setEvents] = React.useState([])
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
         // localStorage.setItem(TOKEN_KEY, JSON.stringify({ userData, type }))
@@ -221,6 +223,14 @@ const Perfil = props => {
             'Qtd',
             'Preço Un'
         ]
+
+        React.useEffect(_ => {
+            if(class_ !== '') {
+                api.getAllFutureAppointments().then(e => {
+                    setEvents(e)
+                })
+            }
+        }, [class_])
         return (
             <div className={`Perfil-container ${class_}`}>
                 {userData.isDefault ? <p>Faça login cara de pastel</p> :
@@ -232,7 +242,7 @@ const Perfil = props => {
                             <HistoryBoxLog title="Historico de compras" headerLabels={headerLabelsHistory} />
                         </Route>
                         <Route exact path="/perfil/agendamentos">
-                            <Agendamentos title="Inventário" changeFather={setClass_} />
+                            <Agendamentos title="Inventário" changeFather={setClass_} Events={events} />
                         </Route>
                         {type === 'admin' &&
                             <Route exact path="/perfil/cadastrar-cliente">
