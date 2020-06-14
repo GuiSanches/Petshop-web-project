@@ -72,21 +72,14 @@ const getProducts = async _ => {
 }
 
 const getProductsHighlights = async _ => {
-    try {
-        const ofertas = await db.collection('ofertas').find({}).toArray()
-
-        return Promise.all(
-            ofertas.map(async e => ({
-                ...e,
-                Produtos: await Promise.all(
-                    e.Produtos.map(async P =>
-                        db.collection('produtos').findOne({ _id: new ObjectID(P) })
-                    ))
-            }))
-        )
-    } catch (e) {
-        return e
-    }
+    return db.collection('ofertas').aggregate([{
+        "$lookup": {
+            from: 'produtos',
+            localField: 'produtos',
+            foreignField: 'ofertas.Produtos',
+            as: 'Produtos'
+        }
+    }]).toArray()
 }
 
 const getPromotions = async _ => {
