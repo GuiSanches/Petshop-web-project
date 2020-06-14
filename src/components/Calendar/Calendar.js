@@ -35,7 +35,7 @@ export default class DemoApp extends React.Component {
         let calendarEvents = this.props.Events.map(e => ({
           title: 'Já Reservado',
           start: e.Data,
-          url: `:${e.Cliente}`,
+          url: `./agendamentos/${e.Cliente}`,
           color: '#FDF2BB',
           textColor: '#3333333',
           ...e

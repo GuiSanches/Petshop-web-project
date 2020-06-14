@@ -23,7 +23,9 @@ const LoginPage = props => {
         }
         const handleSubmit = async e => {
             e.preventDefault()
+            alert('Aguarde')
             let user = await db.signIn(email, password)
+            alert('Foi')
             if (user) {
                 setUserByType('user', user)
                 localStorage.setItem(TOKEN_KEY, JSON.stringify({ user, type: 'user' }))

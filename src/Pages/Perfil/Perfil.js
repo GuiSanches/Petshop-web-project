@@ -44,9 +44,9 @@ const generateUserActions = actions => {
 
 const generateAdminActions = actions => {
     const actionList = actions.map(action => (
-        <a
-            href={action.ref} key={action.label} className="action-item"
-        >{action.label}</a>)
+        <Link
+            to={action.ref} key={action.label} className="action-item"
+        >{action.label}</Link>)
     )
 
     return (
@@ -105,8 +105,8 @@ const Perfil = props => {
     const generateAdminInfo = userInfo => {
         return (
             <div className="info-box">
-                <h2 className="user-container-label">{userInfo.nome}</h2>
-                <p>{userInfo.email}</p>
+                <h2 className="user-container-label">{userInfo.Nome}</h2>
+                <p>{userInfo.Email}</p>
             </div>
         )
     }
@@ -225,9 +225,13 @@ const Perfil = props => {
         ]
 
         React.useEffect(_ => {
-            if(class_ !== '') {
+            if (class_ !== '') {
                 api.getAllFutureAppointments().then(e => {
+                    alert('Carregado com sucesso')
                     setEvents(e)
+                }).catch(e => {
+                    console.log(e, 'o-ou')
+                    alert('o-ou')
                 })
             }
         }, [class_])

@@ -25,7 +25,7 @@ const Cadastro = _ => {
     const handleSubmit = e => {
         e.preventDefault()
         if(pass === confirmPass)
-        db.signUp({name, email, CPF, date, phone, pass})
+        db.signUpClient({name, email, CPF, date, phone, pass})
 
     }
 

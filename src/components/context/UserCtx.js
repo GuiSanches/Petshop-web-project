@@ -31,7 +31,7 @@ const matches = (obj, source) =>
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
     const [load, setLoaded] = React.useState(false)
-    const [type, setType] = React.useState('user')
+    const [type, setType] = React.useState('admin')
 
     React.useEffect(_ => {
         let user = JSON.parse(localStorage.getItem(TOKEN_KEY))

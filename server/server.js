@@ -25,6 +25,7 @@ const server = async () => {
     app.use(bodyParser.json());
 
     app.listen(PORT, () => {
+        db.initialize()
         console.log(`server running on port ${PORT}`)
     })
 
@@ -34,7 +35,7 @@ const server = async () => {
     })
 
     app.get('/login', async (req, res, next) => {
-        const { email, password } = req.body;
+        const { email, password } = req.query;
         try {
             await db.initialize()
             let user = await db.signIn(email, password)
@@ -54,7 +55,7 @@ const server = async () => {
         try {
             await db.initialize()
 
-            await db.signUp({
+            await db.signUpClient({
                 Nome: name,
                 Email: email,
                 Nascimento: new Date(date),
@@ -71,6 +72,25 @@ const server = async () => {
         } catch (e) {
             console.log(e)
             res.status(404).send(e.message)
+        }
+    })
+
+    app.post('/create-admin', async (req, res, next) => {
+        const { name, email, pass } = req.body
+        try {
+            await db.initialize()
+
+            const resp = await db.signUpAdmin({
+                Nome: name,
+                Email: email,
+                Senha: pass
+            })
+            await db.destroy()
+            res.send('Veterinário adicionado com sucesso')
+
+        } catch (e) {
+            res.status(404)
+            console.log(e)
         }
     })
 
@@ -102,6 +122,27 @@ const server = async () => {
         }
     })
 
+    app.get('/products-highlights', async (req, res, next) => {
+        try {
+            await db.initialize()
+            let resp = await db.getProductsHighlights()
+            await db.destroy()
+            res.send(resp)
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.get('/promotions', async (req, res, next) => {
+        try {
+            await db.initialize()
+            let resp = await db.getPromotions()
+            res.send(resp)
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
     app.post('/book-appointment', async (req, res, next) => {
         const data = req.body
 
@@ -124,7 +165,7 @@ const server = async () => {
             console.log(resp)
             await db.destroy()
             res.send(resp)
-        }catch(e) {
+        } catch (e) {
             console.log(e)
         }
     })

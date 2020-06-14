@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID
 let client;
 let db;
+const Crypto = require('./Crypto');
 
 const initialize = async _ => {
     const uri = "mongodb+srv://petshop:admim@cluster0-il6hs.mongodb.net/petshop?retryWrites=true&w=majority";
@@ -11,7 +12,6 @@ const initialize = async _ => {
     client = await MongoClient.connect(uri, { useUnifiedTopology: true });
 
     db = client.db('petshop')
-    db.collection('produtos').find({ _id: 'dsa' })
 }
 
 const destroy = async _ => {
@@ -19,11 +19,23 @@ const destroy = async _ => {
 }
 
 const signIn = async (email, password) => {
-    return db.collection('users').findOne({ Email: email, Senha: password })
+    const user = await db.collection('users').findOne({ Email: email })
+
+    if (Crypto.Compare(password, user.Senha))
+        return user
+    else throw new Error('Invalid password')
 }
 
-const signUp = async (userData) => {
+const signUpClient = async (userData) => {
+    const pass = await Crypto.Encrypt(userData.Senha)
+    userData.Senha = pass
     return db.collection('users').insertOne(userData)
+}
+
+const signUpAdmin = async (adminData) => {
+    const pass = await Crypto.Encrypt(adminData.Senha)
+    adminData.Senha = pass
+    return db.collection('veterinarios').insertOne(adminData)
 }
 
 const getShopBoughtById = async id => db.collection('compras').find(
@@ -59,17 +71,34 @@ const getProducts = async _ => {
     return db.collection('produtos').find({}).toArray()
 }
 
-const getAllFutureBook = async _ => {
+const getProductsHighlights = async _ => {
     try {
-        let resp = await db.collection('consultas').find({
-            Data: {
-                $gte: new Date()
-            }
-        }).toArray()
-        return resp
+        const ofertas = await db.collection('ofertas').find({}).toArray()
+
+        return Promise.all(
+            ofertas.map(async e => ({
+                ...e,
+                Produtos: await Promise.all(
+                    e.Produtos.map(async P =>
+                        db.collection('produtos').findOne({ _id: new ObjectID(P) })
+                    ))
+            }))
+        )
     } catch (e) {
         return e
     }
+}
+
+const getPromotions = async _ => {
+    return db.collection('destaques').find({}).toArray()
+}
+
+const getAllFutureBook = async _ => {
+    return db.collection('consultas').find({
+        Data: {
+            $gte: new Date()
+        }
+    }).toArray()
 }
 
 const bookAppointment = async ({ ClientData, PetData }) => {
@@ -85,10 +114,13 @@ const bookAppointment = async ({ ClientData, PetData }) => {
 module.exports = {
     initialize,
     signIn,
-    signUp,
+    signUpClient,
+    signUpAdmin,
     getCartById,
     getProducts,
+    getProductsHighlights,
     bookAppointment,
+    getPromotions,
     getAllFutureBook,
     destroy
 }
