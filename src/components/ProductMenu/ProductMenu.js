@@ -2,50 +2,68 @@ import React from 'react';
 import './ProductMenu.scss';
 import Dropdown from '../Dropdown/Dropdown'
 import api from '../Db/Db'
+import { ProductCtx } from '../context/ProductsCtx'
 // get our fontawesome imports
 
-const ProductsPage = ({ title }) => {
-    const defaultCards = Array.from(
-        { length: 9 },
-        () => ({
-            name: 'Produto',
-            price: '6,90',
-            link: '#',
-            Foto: 'dog-food.svg'
-        })
-    )
-    const [cards, setCards] = React.useState(defaultCards)
+const ProductsPage = ({ title, search }) => {
     const [loading, setLoading] = React.useState(true)
     const [cardsBack, setCardsBack] = React.useState(null)
+    const [cardsFilter, setCardsFilter] = React.useState(cardsBack)
 
     React.useEffect(() => {
         if (loading) {
             api.getProducts().then(res => {
-                setCardsBack(res
-                    .map(res => ({
-                        ...res,
-                        name: res.Nome,
-                        price: res.Preco['$numberDecimal'],
-                        link: '#',
-                        Foto: res.Foto,                        
-                    })
-                    ))                
+                const Products = res.map(res => ({
+                    ...res,
+                    name: res.Nome,
+                    price: res.Preco,
+                    link: '#',
+                    Foto: res.Foto,
+                }))
+                const filter = Products.filter(p => p.Nome.includes(search))
+                setCardsBack(Products)
+                setCardsFilter(filter.length > 0 ? filter : Products)
                 setLoading(false)
             }).catch(e => console.log(e))
         }
     }, [loading])
 
     React.useEffect(() => {
-        console.log(cardsBack)
-    }, [cardsBack])
+        console.log(cardsBack, 'trocou')
+    }, [cardsFilter])
+
+    const handleFilter = item => {
+        const filter = item.filter([...cardsBack])
+        console.log(item, filter)
+        setCardsFilter(filter)
+    }
 
     return (
         <div className="Products-container">
             <h1 className="Products-title">{title}</h1>
-            <SearchProduct />
-            <ProductsGrid cards={cardsBack} />
+            <SearchProduct onFilterChange={handleFilter} />
+            <ProductsGrid cards={cardsFilter} />
         </div>
     );
+}
+
+const HandleFilters = {
+    HighPrice: price => {
+        return price.sort((a, b) => b.Preco['$numberDecimal'] - a.Preco['$numberDecimal'])
+    },
+    LowPrice: price => {
+        return price.sort((a, b) => a.Preco['$numberDecimal'] - b.Preco['$numberDecimal'])
+    },
+    Relevance: relevance => {
+        return relevance.sort((a, b) => a.Estoque - b.Estoque)
+    },
+    Promotion: promotion => {
+        return promotion.filter(p => p.Oferta)
+    },
+    Shipping: shipping => {
+        return shipping.sort((a, b) => (a.FreteGratis === b.FreteGratis) ? 0 : a.FreteGratis ? -1 : 1)
+    },
+    None: arr => arr
 }
 
 const options = [
@@ -53,35 +71,41 @@ const options = [
         id: 0,
         title: 'Maior preço',
         selected: false,
-        key: 'price'
+        key: 'price',
+        filter: HandleFilters.HighPrice
     },
     {
         id: 1,
         title: 'Menor Preço',
         selected: false,
-        key: 'entrega'
+        key: 'entrega',
+        filter: HandleFilters.LowPrice
     },
     {
         id: 2,
         title: 'Relevância',
         selected: false,
-        key: 'frete'
+        key: 'frete',
+        filter: HandleFilters.Relevance
     },
     {
         id: 3,
         title: 'Promoção',
         selected: false,
-        key: 'disponibilidade'
+        key: 'disponibilidade',
+        filter: HandleFilters.Promotion
     },
     {
         id: 4,
         title: 'Frete',
         selected: false,
-        key: 'location'
+        key: 'location',
+        filter: HandleFilters.Shipping
     }
 ]
 
-const SearchProduct = props => {
+
+const SearchProduct = ({ onFilterChange }) => {
     const [filterOptions, setFilterOptions] = React.useState(options)
     const [selectedId, setSelectedId] = React.useState(-1)
     const [listOpen, setListOpen] = React.useState(false)
@@ -89,6 +113,8 @@ const SearchProduct = props => {
 
     const updateSelected = (item, id) => {
         setSelectedOption(item)
+        if(id !== -1) onFilterChange(item)
+        else onFilterChange({filter: HandleFilters.None})
         setSelectedId(id)
     }
 
@@ -142,6 +168,11 @@ const SearchProduct = props => {
 const ProductsGrid = ({ cards }) => {
 
     const ProductCard = ({ card }) => {
+        const { setProducts } = React.useContext(ProductCtx)
+        const handleBuy = _ => {
+            setProducts(card)
+            alert('Produto adicionado com sucesso no carrinho')
+        }
         return (
             <div className="product-grid-item" key={card.name}>
                 <div className="P-card-product">
@@ -150,10 +181,11 @@ const ProductsGrid = ({ cards }) => {
                     </div>
                     <div className="product-info">
                         <p>{card.name}</p>
-                        <p>R$: {card.price}</p>
+                        <p>R$: {card.price} </p>
+                        {card.FreteGratis && <p style={{fontSize: '1em'}}>Frete grátis</p>}
                     </div>
                     <div>
-                        <a href="" className="product-buy">Comprar</a>
+                        <button href="" className="product-buy" onClick={handleBuy}>Comprar</button>
                     </div>
                 </div>
             </div>
@@ -163,7 +195,7 @@ const ProductsGrid = ({ cards }) => {
     return (
         <div className="cards-p-container">
             <div className="cards-grid">
-                {cards == null ? 'Carregando...' :cards.map(card => <ProductCard card={card} />)}
+                {cards == null ? 'Carregando...' : cards.map(card => <ProductCard card={card} key={card._id} />)}
             </div>
         </div>
     )

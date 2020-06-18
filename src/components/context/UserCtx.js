@@ -1,4 +1,6 @@
 import React from 'react'
+import ProductContext from './ProductsCtx';
+
 export const TOKEN_KEY = "Petshop";
 
 const commonData = {
@@ -26,7 +28,7 @@ const defaultAdminData = {
 
 export const UserCtx = React.createContext(defaultUserData)
 const matches = (obj, source) =>
-  Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
+    Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
 
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
@@ -39,7 +41,7 @@ export function UserContext(props) {
             user = user.user
             setUserData(user)
             setLoaded(true)
-        }        
+        }
     }, [load])
 
     const setUserAdmin = userData => {
@@ -62,7 +64,9 @@ export function UserContext(props) {
             userData,
             setUserByType
         }}>
-            {props.children}
+            <ProductContext>
+                {props.children}
+            </ProductContext>
         </UserCtx.Provider>
     )
 }

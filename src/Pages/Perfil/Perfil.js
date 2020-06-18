@@ -118,6 +118,10 @@ const Perfil = props => {
                 ref: '/perfil/historico-compras'
             },
             {
+                label: "Carrinho de compras",
+                ref: '/perfil/carrinho-compras'
+            },
+            {
                 label: "Agendamentos",
                 ref: '/perfil/agendamentos'
             },
@@ -235,6 +239,7 @@ const Perfil = props => {
                 })
             }
         }, [class_])
+        
         return (
             <div className={`Perfil-container ${class_}`}>
                 {userData.isDefault ? <p>Faça login cara de pastel</p> :

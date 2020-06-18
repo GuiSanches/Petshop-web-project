@@ -1,7 +1,7 @@
 const assert = require('assert');
-
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient;
+const ObjectID = mongodb.ObjectID
 let client;
 let db;
 const Crypto = require('./Crypto');
@@ -71,6 +71,30 @@ const getProducts = async _ => {
     return db.collection('produtos').find({}).toArray()
 }
 
+const AddProduct = async data => {
+    return db.collection('produtos').insertOne(data)
+}
+
+const updateProduct = async (_id, data) => {
+    return db.collection('produtos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: data
+        }
+    )
+}
+
+const deleteProduct = async _id => {
+    return db.collection('produtos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: {
+                deleted: true
+            }
+        }
+    )
+}
+
 const getProductsHighlights = async _ => {
     return db.collection('ofertas').aggregate([{
         "$lookup": {
@@ -104,6 +128,18 @@ const bookAppointment = async ({ ClientData, PetData }) => {
     })
 }
 
+const AddPurchase = async Products => {
+    const data = Products.map(product => ({
+        Cliente: new ObjectID(product.userId),
+        Produto: new ObjectID(product._id),
+        Quantidade: 1,
+        PrecoUnitario: mongodb.Decimal128.fromString(product.Preco['$numberDecimal']),
+        Date: new Date(product.Date)
+    }))
+
+    return db.collection('compras').insertMany(data)
+}
+
 module.exports = {
     initialize,
     signIn,
@@ -111,10 +147,14 @@ module.exports = {
     signUpAdmin,
     getCartById,
     getProducts,
+    AddProduct,
+    updateProduct,
+    deleteProduct,
     getProductsHighlights,
     bookAppointment,
     getPromotions,
     getAllFutureBook,
+    AddPurchase,
     destroy
 }
 

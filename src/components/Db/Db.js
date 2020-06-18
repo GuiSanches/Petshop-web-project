@@ -37,9 +37,21 @@ const backend = {
 
         return resp.data
     },
-
+    AddProduct: async (data) => {
+        const resp = await api.post('/add-product', { data })
+    },
     getProducts: async _ => {
         const resp = await api.get(`/products`)
+
+        return resp.data
+    },
+    updateProduct: async ({ _id, ...Product }) => {
+        const resp = await api.post(`/products/${_id}`, { Product })
+
+        return resp.data
+    },
+    deleteProduct: async _id => {
+        const resp = await api.post(`/delete-product/${_id}`)
 
         return resp.data
     },
@@ -50,7 +62,7 @@ const backend = {
     },
     getPromotions: async _ => {
         const resp = await api.get('/promotions')
-        
+
         return resp.data
     },
     bookAppointment: async (ClientData, PetData) => {
@@ -63,6 +75,10 @@ const backend = {
         const resp = await api.get('/all-book')
 
         return resp.data
+    },
+    buyProducts: async Products => {
+        const resp = await api.post('/buy-products', Products)
+        return ({ msg: 'Sucesso' })
     }
 }
 

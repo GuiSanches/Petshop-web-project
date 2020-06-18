@@ -122,6 +122,44 @@ const server = async () => {
         }
     })
 
+    app.post('/add-product', async (req, res, next) => {
+        try {
+            const {data} = req.body
+            await db.initialize()
+            const resp = await db.AddProduct(data)
+            await db.destroy()
+            res.send(data)
+        }catch(e) {
+            console.log(e)
+        }
+    })
+
+    app.post('/products/:id', async (req, res, next) => {
+        try {
+            const id = req.params.id
+            const { Product } = req.body
+            await db.initialize()
+            let resp = await db.updateProduct(id, Product)
+            await db.destroy()
+            res.send(resp)
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.post('/delete-product/:id', async (req, res, next) => {
+        try {
+            const id = req.params.id
+            await db.initialize()
+            const resp = await db.deleteProduct(id)
+            console.log(resp)
+            await db.destroy()
+            res.send(resp)
+        }catch(e) {
+            console.log(e)
+        }
+    })
+
     app.get('/products-highlights', async (req, res, next) => {
         try {
             await db.initialize()
@@ -167,6 +205,19 @@ const server = async () => {
             res.send(resp)
         } catch (e) {
             console.log(e)
+        }
+    })
+
+    app.post('/buy-products', async (req, res, next) => {
+        const data = req.body
+        try {
+            await db.initialize()
+            const resp = await db.AddPurchase(data)
+            await db.destroy()
+            res.send(resp)
+        } catch (e) {
+            console.log(e)
+            res.status(404)
         }
     })
 }

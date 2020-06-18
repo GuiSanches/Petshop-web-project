@@ -26,7 +26,7 @@ const generateRow = rowData => {
         rowData.item,
         rowData.Nome,
         rowData.Qtd,
-        `R$ ${rowData.Price['$numberDecimal']}`
+        `R$ ${rowData.Price}`
     ]
 
     return generateItem(RowArray)
