@@ -14,7 +14,7 @@ const commonData = {
 }
 
 const defaultUserData = {
-    isDefault: false,
+    isDefault: true,
     Telefone: '9999999999',
     signo: 'leaozinho',
     Animais: [],
@@ -34,15 +34,17 @@ export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
     const [load, setLoaded] = React.useState(false)
     const [type, setType] = React.useState('admin')
+    const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
-        let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
+        let user = JSON.parse(localStorage.getItem(TOKEN_KEY))        
         if (!load && user) {
             user = user.user
             setUserData(user)
             setLoaded(true)
+            // alert('OI')
         }
-    }, [load])
+    }, [isMounted])
 
     const setUserAdmin = userData => {
         setType('admin')

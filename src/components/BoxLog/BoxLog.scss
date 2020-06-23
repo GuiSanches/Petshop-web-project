@@ -81,6 +81,18 @@ $radius: 14px;
     }
 }
 
+.grid-service {
+    grid-template-columns: 7em  auto 7em;
+}
+
+.container-service {
+    width: 80%;
+
+    #buy-store {
+        padding: .5em 2.5em;
+    }
+}
+
 .box-action {
     display: flex;
     flex-direction: column;

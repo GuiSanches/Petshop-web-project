@@ -18,6 +18,7 @@ export const ProductCtx = React.createContext([])
 
 export default function ProductContext(props) {
     const [Products, setProduct] = React.useState([])
+    const [isMounted, setIsMounted] = React.useState()
     const setProducts = data => {
 
         if (Products.length > 0) {
@@ -34,14 +35,13 @@ export default function ProductContext(props) {
 
     React.useEffect(_ => {
         const products = JSON.parse(localStorage.getItem('carrinho'))
-        if (products && (products.length > 0 && Products.length === 0))
+        if (products && (products.length > 0 && Products.length === 0)) {
             setProduct(products)
-    })
-
-    React.useEffect(_ => {
-        if (Products.length > 0)
-            localStorage.setItem('carrinho', JSON.stringify(Products))
-    }, [Products])
+            if (Products.length > 0)
+                localStorage.setItem('carrinho', JSON.stringify(Products))
+        }
+        // alert('oi')
+    }, [isMounted])
 
     return (
         <ProductCtx.Provider value={{

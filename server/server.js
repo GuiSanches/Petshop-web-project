@@ -31,7 +31,7 @@ const server = async () => {
 
     app.get('/', (req, res, next) => {
 
-        res.send({ PetGui: 'Sucesso, bem vindo a melhor petshop do BRASIL!' })
+        res.send({ PetGui: 'Sucesso, bem vindo à melhor petshop do BRASIL!' })
     })
 
     app.get('/login', async (req, res, next) => {
@@ -122,11 +122,39 @@ const server = async () => {
         }
     })
 
+    app.get('/services', async (req, res, next) => {
+        try {
+            console.log('oi')
+            await db.initialize()
+
+            let resp = await db.getServices()
+            console.log(resp)
+
+            await db.destroy()
+            res.send(resp)
+
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
     app.post('/add-product', async (req, res, next) => {
         try {
             const {data} = req.body
             await db.initialize()
             const resp = await db.AddProduct(data)
+            await db.destroy()
+            res.send(data)
+        }catch(e) {
+            console.log(e)
+        }
+    })
+
+    app.post('/add-service', async (req, res, next) => {
+        try {
+            const {data} = req.body
+            await db.initialize()
+            const resp = await db.AddService(data)
             await db.destroy()
             res.send(data)
         }catch(e) {
@@ -147,11 +175,38 @@ const server = async () => {
         }
     })
 
+    app.post('/services/:id', async (req, res, next) => {
+        try {
+            const id = req.params.id
+            const { Product } = req.body
+            await db.initialize()
+            let resp = await db.updateService(id, Product)
+            await db.destroy()
+            res.send(resp)
+        } catch (e) {
+            console.log(e)
+        }
+    })
+
     app.post('/delete-product/:id', async (req, res, next) => {
         try {
             const id = req.params.id
             await db.initialize()
             const resp = await db.deleteProduct(id)
+            console.log(resp)
+            await db.destroy()
+            res.send(resp)
+        }catch(e) {
+            console.log(e)
+        }
+    })
+
+    app.post('/delete-service/:id', async (req, res, next) => {
+        try {
+            const id = req.params.id
+            console.log(id)
+            await db.initialize()
+            const resp = await db.deleteService(id)
             console.log(resp)
             await db.destroy()
             res.send(resp)
@@ -177,6 +232,19 @@ const server = async () => {
             let resp = await db.getPromotions()
             res.send(resp)
         } catch (e) {
+            console.log(e)
+        }
+    })
+
+    app.get('/appointment-info/:id', async (req, res, next) => {
+        try {
+            const id = req.params.id
+            await db.initialize()
+            let resp = await db.getAppointmentInfo(id)
+            console.log(resp[0])
+            await db.destroy()
+            res.send(resp[0])
+        }catch(e) {
             console.log(e)
         }
     })

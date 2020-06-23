@@ -32,14 +32,18 @@ export default class DemoApp extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.Events !== this.props.Events)
       if (this.props.Events.length > 0) {
-        let calendarEvents = this.props.Events.map(e => ({
-          title: 'Já Reservado',
-          start: e.Data,
-          url: `./agendamentos/${e.Cliente}`,
-          color: '#FDF2BB',
-          textColor: '#3333333',
-          ...e
-        }))
+        let calendarEvents = this.props.Events.map(e => {
+          // console.log(e, 'E')
+          return ({
+            title: 'Já Reservado',
+            start: e.Data,
+            url: `./agendamentos/${e._id}`,
+            color: '#FDF2BB',
+            textColor: '#3333333',
+            ...e
+          })
+        }
+        )
 
         this.setState(
           { calendarEvents }

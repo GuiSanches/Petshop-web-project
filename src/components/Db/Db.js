@@ -40,8 +40,16 @@ const backend = {
     AddProduct: async (data) => {
         const resp = await api.post('/add-product', { data })
     },
+    AddService: async (data) => {
+        const resp = await api.post('/add-service', { data })
+    },
     getProducts: async _ => {
         const resp = await api.get(`/products`)
+
+        return resp.data
+    },
+    getServices: async _ => {
+        const resp = await api.get(`/services`)
 
         return resp.data
     },
@@ -50,8 +58,18 @@ const backend = {
 
         return resp.data
     },
+    updateService: async ({ _id, ...Product }) => {
+        const resp = await api.post(`/services/${_id}`, { Product })
+
+        return resp.data
+    },
     deleteProduct: async _id => {
         const resp = await api.post(`/delete-product/${_id}`)
+
+        return resp.data
+    },
+    deleteService: async _id => {
+        const resp = await api.post(`/delete-service/${_id}`)
 
         return resp.data
     },
@@ -62,6 +80,11 @@ const backend = {
     },
     getPromotions: async _ => {
         const resp = await api.get('/promotions')
+
+        return resp.data
+    },
+    getAppointmentDetail: async (AppointmentID) => {
+        const resp = await api.get(`/appointment-info/${AppointmentID}`)
 
         return resp.data
     },

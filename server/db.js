@@ -71,12 +71,30 @@ const getProducts = async _ => {
     return db.collection('produtos').find({}).toArray()
 }
 
+const getServices = async _ => {
+    return db.collection('servicos').find({}).toArray()
+}
+
 const AddProduct = async data => {
     return db.collection('produtos').insertOne(data)
 }
 
+const AddService = async data => {
+    return db.collection('servicos').insertOne(data)
+}
+
+
 const updateProduct = async (_id, data) => {
-    return db.collection('produtos').updateOne(
+    return db.collection('servicos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: data
+        }
+    )
+}
+
+const updateService = async (_id, data) => {
+    return db.collection('servicos').updateOne(
         { _id: new ObjectID(_id) },
         {
             $set: data
@@ -86,6 +104,17 @@ const updateProduct = async (_id, data) => {
 
 const deleteProduct = async _id => {
     return db.collection('produtos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: {
+                deleted: true
+            }
+        }
+    )
+}
+
+const deleteService = async _id => {
+    return db.collection('servicos').updateOne(
         { _id: new ObjectID(_id) },
         {
             $set: {
@@ -110,6 +139,39 @@ const getPromotions = async _ => {
     return db.collection('destaques').find({}).toArray()
 }
 
+const getAppointmentInfo = Id => {
+    return db.collection('consultas').aggregate([
+        {
+            $match: { _id: new ObjectID(Id) }
+        },
+        {
+            "$lookup": {
+                from: 'users',
+                localField: 'Cliente',
+                foreignField: '_id',
+                as: 'Cliente'
+            }
+        },
+        {
+            "$lookup": {
+                from: 'veterinarios',
+                localField: 'Veterinario',
+                foreignField: '_id',
+                as: 'Veterinario'
+            }
+        },
+        {
+            $project: {
+                Cliente: {
+                    Senha: 0,
+                },
+                Veterinario: {
+                    Senha: 0
+                }
+            }
+        }
+    ]).toArray()
+}
 const getAllFutureBook = async _ => {
     return db.collection('consultas').find({
         Data: {
@@ -133,7 +195,7 @@ const AddPurchase = async Products => {
         Cliente: new ObjectID(product.userId),
         Produto: new ObjectID(product._id),
         Quantidade: 1,
-        PrecoUnitario: mongodb.Decimal128.fromString(product.Preco['$numberDecimal']),
+        PrecoUnitario: product.Preco,
         Date: new Date(product.Date)
     }))
 
@@ -147,10 +209,15 @@ module.exports = {
     signUpAdmin,
     getCartById,
     getProducts,
+    getServices,
     AddProduct,
+    AddService,
     updateProduct,
+    updateService,
     deleteProduct,
+    deleteService,
     getProductsHighlights,
+    getAppointmentInfo,
     bookAppointment,
     getPromotions,
     getAllFutureBook,

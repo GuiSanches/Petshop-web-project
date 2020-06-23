@@ -2,6 +2,7 @@ import React from 'react'
 import './BoxLog.scss'
 import { Link } from 'react-router-dom'
 import api from '../Db/Db'
+import { UserCtx } from '../context/UserCtx'
 
 
 const generateList = array => array.map(row => generateItem(row))
@@ -13,38 +14,24 @@ const generateItem = array => (
     </>
 )
 
-
-const item = [
-    '12345',
-    <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
-    'Conjunto Completo',
-    '22',
-    'R$ 119, 90'
-]
-
-const items = Array.from({ length: 7 }).fill(item)
-
 const generateBoxHeader = labels => labels.map(
     label => <div key={label}>{label}</div>
 )
 
 const BoxLog = ({ title, headerLabels, getData }) => {
-    const [Inventory, setInventory] = React.useState()
+    const [Services, setServices] = React.useState()
     const [isPopUpVisible, setIsPopUpVisible] = React.useState(false)
     const [popUpInputs, setPopUpInputs] = React.useState([])
     const [popUpType, setPopUpType] = React.useState()
     const [isDisabled, setIsDisabled] = React.useState(true)
+    const { type } = React.useContext(UserCtx)
 
     const ID_LEN = 8
     const AddLayout = [
         ['Nome', ''],
-        ['Foto', ''],
         ['Preco', ''],
-        ['Estoque', ''],
         ['Oferta', false, 'bool'],
-        ['Frete Gratis', false, 'bool'],
         ['Descricao', ''],
-        ['Tags', '']
     ]
 
     const EditLayout = [
@@ -57,33 +44,29 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     ]
 
     React.useEffect(_ => {
-        if (!Array.isArray(Inventory))
-            api.getProducts().then(products => {
-                setInventory(products.filter(p => !p.deleted))
+        if (!Array.isArray(Services))
+            api.getServices().then(products => {
+                setServices(products.filter(p => !p.deleted))
             })
-    }, [Inventory])
+    }, [Services])
 
     React.useEffect(_ => {
         // Edit Product
-        if (Inventory)
+        if (Services)
             if (popUpInputs.length > 2 && popUpInputs[0][0] === 'Código' &&
                 popUpInputs[0][1].length === ID_LEN) {
                 if (isDisabled) {
                     let input = Array.from({ length: EditLayout.length }).fill('')
                     input[0] = popUpInputs[0][1]
 
-                    for (let I of Inventory)
+                    for (let I of Services)
                         if (I._id.slice(0, ID_LEN) === popUpInputs[0][1]) {
                             input = [
                                 I._id.slice(0, ID_LEN),
                                 I.Nome,
-                                I.Foto,
                                 I.Preco,
-                                I.Estoque,
                                 I.Oferta,
-                                I.FreteGratis,
                                 I.Descricao,
-                                I.Tags.join(',')
                             ]
                             break
                         }
@@ -100,11 +83,9 @@ const BoxLog = ({ title, headerLabels, getData }) => {
 
     }, [popUpInputs])
 
-    const ParseInventory = Inventory => Inventory.map(I => [
+    const ParseInventory = Services => Services.map(I => [
         I._id.slice(0, ID_LEN),
-        <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
         I.Nome,
-        I.Estoque,
         I.Preco
     ])
 
@@ -135,22 +116,21 @@ const BoxLog = ({ title, headerLabels, getData }) => {
         switch (popUpType) {
             case 'Edit':
                 try {
-                    let { _id, ...Product } = Inventory.find(I => I._id.slice(0, ID_LEN) === popUpInputs[0][1])
+                    let { _id, ...Product } = Services.find(I => I._id.slice(0, ID_LEN) === popUpInputs[0][1])
                     let [id, ...inputParse] = popUpInputs
+                    console.log(_id, Product, inputParse)
                     inputParse = inputParse.map(i => i[1])
-                    inputParse[2] = parseFloat(inputParse[2])
-                    inputParse[3] = parseInt(inputParse[3])
-                    inputParse[7] = inputParse[7].split(',')
+                    inputParse[1] = parseFloat(inputParse[1])
                     let idx = 0
                     for (let i in Product) {
                         console.log(i, 'i')
                         Product[i] = inputParse[idx++]
                     }
                     Product = { _id, ...Product }
-                    console.log(inputParse)
-                    api.updateProduct(Product).then(e => {
-                        setInventory(undefined)
-                        alert('Produto atualizado com sucesso')
+                    console.log(Product)
+                    api.updateService(Product).then(e => {
+                        setServices(undefined)
+                        alert('Serviço atualizado com sucesso')
                     })
                     setIsPopUpVisible(false)
                 } catch (e) {
@@ -159,26 +139,24 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 break
             case 'Add':
                 try {
-                    let { _id, ...Product } = Inventory[0]
+                    let { _id, ...Product } = Services[0]
                     let inputParse = [...popUpInputs]
                     console.log(_id, Product, inputParse)
                     inputParse = inputParse.map(i => {
                         let value = i[1]
-                        if(value === '') throw new Error('Campo invalido')
+                        if (value === '') throw new Error('Campo invalido')
                         return i[1]
                     })
-                    inputParse[2] = parseFloat(inputParse[2])
-                    inputParse[3] = parseInt(inputParse[3])
-                    if(!inputParse[2] || !inputParse[3]) throw new Error('Campo invalido')
-                    inputParse[7] = inputParse[7].split(',')
+                    inputParse[1] = parseFloat(inputParse[1])
+                    if (!inputParse[1]) throw new Error('Campo invalido')
                     let idx = 0
                     for (let i in Product) {
                         console.log(i, 'i')
                         Product[i] = inputParse[idx++]
                     }
-                    api.AddProduct(Product).then(e => {
-                        setInventory(undefined)
-                        alert('Produto adicionado com sucesso')
+                    api.AddService(Product).then(e => {
+                        setServices(undefined)
+                        alert('Serviço adicionado com sucesso')
                     })
                     setIsPopUpVisible(false)
                 } catch (e) {
@@ -187,12 +165,12 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 break;
             case 'Delete':
                 try {
-                    const { _id, } = Inventory.find(I => I._id.slice(0, ID_LEN) === popUpInputs[0][1])
+                    const { _id, } = Services.find(I => I._id.slice(0, ID_LEN) === popUpInputs[0][1])
 
-                    api.deleteProduct(_id)
+                    api.deleteService(_id)
                         .then(e => {
-                            setInventory(undefined)
-                            alert('Produto deletado com sucesso')
+                            setServices(undefined)
+                            alert('Serviço deletado com sucesso')
                         })
                         .catch(e => {
                             alert('Tente novamente')
@@ -233,27 +211,29 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 <div className="box-header">
                     <h1>{title}</h1>
                 </div>
-                <div className="box-grid-container">
-                    <div className="box-grid"> {/* Grid */}
+                <div className="box-grid-container container-service">
+                    <div className="box-grid grid-service"> {/* Grid */}
                         {generateBoxHeader(headerLabels)}
-                        {Inventory ? generateList(ParseInventory(Inventory)) : 'Carregando...'}
+                        {Services ? generateList(ParseInventory(Services)) : 'Carregando...'}
 
                     </div>
+                    {type === 'admin' &&
+                        <div className="box-action">
+                            <div className="inventory-actions">
+                                <button id="buy-store" onClick={_ => handleClick('Edit')}>
+                                    Editar serviço
+                            </button>
+                                <button id="buy-store" onClick={_ => handleClick('Add')}>
+                                    Add serviço
+                            </button>
+                                <button id="buy-store" onClick={_ => handleClick('Delete')}>
+                                    Deletar serviço
+                            </button>
 
-                    <div className="box-action">
-                        <div className="inventory-actions">
-                            <button id="buy-store" onClick={_ => handleClick('Edit')}>
-                                Editar produto
-                            </button>
-                            <button id="buy-store" onClick={_ => handleClick('Add')}>
-                                Add produto
-                            </button>
-                            <button id="buy-store" onClick={_ => handleClick('Delete')}>
-                                Deletar produto
-                            </button>
-
+                            </div>
                         </div>
-                    </div>
+                    }
+
                     {isPopUpVisible &&
                         <div className="box-edit-popup">
                             {showInputsPopUp()}
