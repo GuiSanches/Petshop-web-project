@@ -14,7 +14,7 @@ axios.defaults.crossDomain = true;
 
 const backend = {
     signIn: async (email, password) => {
-        const resp = await api.get('/login', {
+        const resp = await api.get('/auth/login', {
             params: {
                 email,
                 password
@@ -24,24 +24,24 @@ const backend = {
         return resp.data
     },
     signUpClient: async (userData) => {
-        const resp = await api.post('/create-user', userData)
+        const resp = await api.post('/auth/add-user/user', userData)
         return resp.data
     },
     signUpAdmin: async (adminData) => {
-        const resp = await api.post('/create-admin', adminData)
+        const resp = await api.post('/auth/add-user/admin', adminData)
         return resp.data
     },
     getProductsShopLog: async (userID) => {
 
-        const resp = await api.get(`/products-cart/${userID}`)
+        const resp = await api.get(`/products/${userID}`)
 
         return resp.data
     },
     AddProduct: async (data) => {
-        const resp = await api.post('/add-product', { data })
+        const resp = await api.post('/products', { data })
     },
     AddService: async (data) => {
-        const resp = await api.post('/add-service', { data })
+        const resp = await api.post('/services', { data })
     },
     getProducts: async _ => {
         const resp = await api.get(`/products`)
@@ -64,17 +64,17 @@ const backend = {
         return resp.data
     },
     deleteProduct: async _id => {
-        const resp = await api.post(`/delete-product/${_id}`)
+        const resp = await api.post(`/products/delete/${_id}`)
 
         return resp.data
     },
     deleteService: async _id => {
-        const resp = await api.post(`/delete-service/${_id}`)
+        const resp = await api.post(`/services/delete${_id}`)
 
         return resp.data
     },
     getProductsHighlights: async _ => {
-        const resp = await api.get('/products-highlights')
+        const resp = await api.get('/products/highlights')
 
         return resp.data
     },
@@ -84,23 +84,23 @@ const backend = {
         return resp.data
     },
     getAppointmentDetail: async (AppointmentID) => {
-        const resp = await api.get(`/appointment-info/${AppointmentID}`)
+        const resp = await api.get(`/appointments/${AppointmentID}`)
 
         return resp.data
     },
     bookAppointment: async (ClientData, PetData) => {
-        const resp = await api.post('/book-appointment', { ClientData, PetData })
+        const resp = await api.post('/appointments', { ClientData, PetData })
 
         return resp.data
     },
 
     getAllFutureAppointments: async _ => {
-        const resp = await api.get('/all-book')
+        const resp = await api.get('/appointments')
 
         return resp.data
     },
     buyProducts: async Products => {
-        const resp = await api.post('/buy-products', Products)
+        const resp = await api.post('/products/buy', Products)
         return ({ msg: 'Sucesso' })
     }
 }
