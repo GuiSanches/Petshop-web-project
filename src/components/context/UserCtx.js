@@ -27,6 +27,8 @@ const defaultAdminData = {
 }
 
 export const UserCtx = React.createContext(defaultUserData)
+const UserCtxProvider = UserCtx.Provider
+const UserCtxConsumer = UserCtx.Consumer
 const matches = (obj, source) =>
     Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
 
@@ -37,7 +39,7 @@ export function UserContext(props) {
     const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
-        let user = JSON.parse(localStorage.getItem(TOKEN_KEY))        
+        let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
         if (!load && user) {
             user = user.user
             setUserData(user)
@@ -61,7 +63,7 @@ export function UserContext(props) {
         else setUserAdmin(data)
     }
     return (
-        <UserCtx.Provider value={{
+        <UserCtxProvider value={{
             type,
             userData,
             setUserByType
@@ -69,6 +71,12 @@ export function UserContext(props) {
             <ProductContext>
                 {props.children}
             </ProductContext>
-        </UserCtx.Provider>
+        </UserCtxProvider>
     )
 }
+
+export const UserCtxHOC = Component => props => (
+    <UserCtxConsumer>
+        {state => <Component  {...props} state={state}/>}
+    </UserCtxConsumer>
+)

@@ -18,9 +18,20 @@ router.get('/:id', async (req, res, next) => {
         const id = req.params.id
         await db.initialize()
         let resp = await db.getAppointmentInfo(id)
-        console.log(resp[0])
+        // console.log(resp[0])
         await db.destroy()
-        res.send(resp[0])
+        res.send(resp)
+    } catch (e) {
+        console.log(e)
+    }
+})
+router.get('/pet/:id', async (req, res, next) => {
+    try {
+        const userId = req.params.id
+        await db.initialize()
+        let resp = await db.getAppointmentPet(userId)
+        await db.destroy()
+        res.send(resp)
     } catch (e) {
         console.log(e)
     }

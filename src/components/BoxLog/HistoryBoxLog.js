@@ -62,13 +62,13 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const { userData, type } = React.useContext(UserCtx)
 
     React.useEffect(() => {
-        if (userData._id && loading) {
+        if (userData._id) {
             Db.getProductsShopLog(userData._id).then(e => {
                 setCart(e)
                 setLoading(false)
             })
         }
-    }, [loading])
+    }, [])
     return (
         <div className="box-info">
             <div className="box-container">

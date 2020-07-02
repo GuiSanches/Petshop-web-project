@@ -88,6 +88,11 @@ const backend = {
 
         return resp.data
     },
+    getPetAppointment: async userId => {
+        const resp = await api.get(`/appointments/pet/${userId}`)
+
+        return resp.data
+    },
     bookAppointment: async (ClientData, PetData) => {
         const resp = await api.post('/appointments', { ClientData, PetData })
 
@@ -102,7 +107,7 @@ const backend = {
     buyProducts: async Products => {
         const resp = await api.post('/products/buy', Products)
         return ({ msg: 'Sucesso' })
-    }
+    },
 }
 
 export default backend

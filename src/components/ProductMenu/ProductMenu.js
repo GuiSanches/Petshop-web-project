@@ -11,22 +11,20 @@ const ProductsPage = ({ title, search }) => {
     const [cardsFilter, setCardsFilter] = React.useState(cardsBack)
 
     React.useEffect(() => {
-        if (loading) {
-            api.getProducts().then(res => {
-                const Products = res.map(res => ({
-                    ...res,
-                    name: res.Nome,
-                    price: res.Preco,
-                    link: '#',
-                    Foto: res.Foto,
-                }))
-                const filter = Products.filter(p => p.Nome.includes(search))
-                setCardsBack(Products)
-                setCardsFilter(filter.length > 0 ? filter : Products)
-                setLoading(false)
-            }).catch(e => console.log(e))
-        }
-    }, [loading])
+        api.getProducts().then(res => {
+            const Products = res.map(res => ({
+                ...res,
+                name: res.Nome,
+                price: res.Preco,
+                link: '#',
+                Foto: res.Foto,
+            }))
+            const filter = Products.filter(p => p.Nome.includes(search))
+            setCardsBack(Products)
+            setCardsFilter(filter.length > 0 ? filter : Products)
+            setLoading(false)
+        }).catch(e => console.log(e))
+    }, [])
 
     React.useEffect(() => {
         console.log(cardsBack, 'trocou')
@@ -113,8 +111,8 @@ const SearchProduct = ({ onFilterChange }) => {
 
     const updateSelected = (item, id) => {
         setSelectedOption(item)
-        if(id !== -1) onFilterChange(item)
-        else onFilterChange({filter: HandleFilters.None})
+        if (id !== -1) onFilterChange(item)
+        else onFilterChange({ filter: HandleFilters.None })
         setSelectedId(id)
     }
 
@@ -182,7 +180,7 @@ const ProductsGrid = ({ cards }) => {
                     <div className="product-info">
                         <p>{card.name}</p>
                         <p>R$: {card.price} </p>
-                        {card.FreteGratis && <p style={{fontSize: '1em'}}>Frete grátis</p>}
+                        {card.FreteGratis && <p style={{ fontSize: '1em' }}>Frete grátis</p>}
                     </div>
                     <div>
                         <button href="" className="product-buy" onClick={handleBuy}>Comprar</button>

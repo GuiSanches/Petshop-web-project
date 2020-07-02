@@ -13,6 +13,7 @@ import Agendamentos from '../../components/Agendamentos/Agendamentos'
 import AddClient from '../../components/AddClient/AddClient'
 import AddAdmin from '../../components/AddAdmin/AddAdmin';
 import api from '../../components/Db/Db'
+import RegistroPet from '../../components/registroPet/registroPet';
 
 const InfoForm = ({ info }) => {
     return (
@@ -123,6 +124,10 @@ const Perfil = props => {
             {
                 label: "Serviços",
                 ref: '/perfil/servicos'
+            },
+            {
+                label: "Meus Pets",
+                ref: '/perfil/pets'
             },
             {
                 label: "Registro de pet",
@@ -261,6 +266,9 @@ const Perfil = props => {
                         </Route>
                         <Route exact path="/perfil/servicos">
                             <ServicosBoxLog title="Serviços" headerLabels={headerLabelsService} />
+                        </Route>
+                        <Route exact path="/perfil/pets">
+                            <RegistroPet />
                         </Route>
 
                         {type === 'admin' &&

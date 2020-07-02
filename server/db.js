@@ -172,6 +172,54 @@ const getAppointmentInfo = Id => {
         }
     ]).toArray()
 }
+
+const getAppointmentPet = async Id => {
+    const resp = await db.collection('users').aggregate([
+        {
+            $match: { _id: new ObjectID(Id) }
+        },
+        {
+            "$lookup": {
+                from: 'consultas',
+                localField: 'Animais.Nome',
+                foreignField: 'Animal',
+                as: 'consultas'
+            }
+        },
+        {
+            $project: {
+                consultas: 1
+            }
+        },
+        {
+            $limit: 1
+        }
+    ]).next()
+    console.log('a', resp, 'a')
+
+    const NearestDateByPet = {}
+    let len = 0
+
+    //Set nearest Date by Pet
+    resp.consultas.forEach(a => {
+        let Nearest = new Date(a.Data)
+        let diff = new Date().getTime() - Nearest.getTime()
+        if (diff > 0) return // Pass date
+        if (!(a.Animal in NearestDateByPet)) {
+            NearestDateByPet[a.Animal] = a
+            len++
+        } else {
+            Nearest = new Date(NearestDateByPet[a.Animal].Data)
+            diff = new Date(a.Data).getTime() - Nearest.getTime()
+            if (diff < 0)
+                NearestDateByPet[a.Animal] = a
+        }
+    })
+
+    NearestDateByPet['len'] = len
+
+    return NearestDateByPet
+}
 const getAllFutureBook = async _ => {
     return db.collection('consultas').find({
         Data: {
@@ -202,6 +250,10 @@ const AddPurchase = async Products => {
     return db.collection('compras').insertMany(data)
 }
 
+const getUserPets = async Id => {
+
+}
+
 module.exports = {
     initialize,
     signIn,
@@ -218,11 +270,12 @@ module.exports = {
     deleteService,
     getProductsHighlights,
     getAppointmentInfo,
+    getAppointmentPet,
     bookAppointment,
     getPromotions,
     getAllFutureBook,
     AddPurchase,
-    destroy
+    destroy,
 }
 
 
