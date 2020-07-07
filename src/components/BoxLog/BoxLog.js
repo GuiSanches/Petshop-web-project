@@ -10,6 +10,10 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const { userData } = React.useContext(UserCtx)
     const [items_, setItems_] = React.useState(null)
 
+    React.useEffect(() => {
+        setProducts(JSON.parse(localStorage.getItem('Products')))
+    }, [])
+
     const parseItems = items => items.map(item => {
         item['Qtd'] = 1
         return ([
@@ -37,12 +41,12 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const handleRemove = idx => {
         let arr = [...Products]
         arr.splice(idx, 1)
-        if(arr.length === 0) clear()
+        if (arr.length === 0) clear()
         else setProduct(arr)
     }
     const generateItem = (array, idx) => (
         <>
-            <div className="item item-1">
+            <div className="item item-1" key={idx + array[0]}>
                 <span className="item-x" onClick={_ => handleRemove(idx)}>x</span>
                 {array[0]}
             </div>
@@ -55,7 +59,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     )
 
     const calculatePrice = Products => {
-        return Products.reduce((acc, el) => acc + parseFloat(el.price),0)
+        return Products.reduce((acc, el) => acc + parseFloat(el.price), 0)
     }
 
     return (

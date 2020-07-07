@@ -27,15 +27,16 @@ const parseAge = birthday => {
     return `${Years} ano${Years > 1 ? 's' : ''}, ${months} ${months > 1 ? 'meses' : 'mês'} e ${Days} dia${Days > 1 ? 's' : ''}`
 }
 
-const Registro = ({ state: { userData } }) => {
+const Registro = ({ state }) => {
     const initialDegree = 2
     const rotateInc = 32
     const carrouselLen = 3
+    const [userData, setUserData] = useState(state.userData)
     const [cards, setCards] = useState(cardsPattern)
-    const maxSwipes = cards.length - carrouselLen - 1
+    const [maxSwipes, setMaxSwipes] = useState(cards.length - carrouselLen - 1)
     const [page, setPage] = useState(0)
     const [rotationGrid, setRotationGrid] = useState(initialDegree) // degree rotate
-    const [selectedGrid, setSelectedGrid] = useState(0) // Element at center
+    const [selectedGrid, setSelectedGrid] = useState(1) // Element at center
     const [appointments, setAppointments] = useState({})
     const [PetInfo, setPetInfo] = useState({
         nasc: 'DD/MM/AAAA',
@@ -46,12 +47,23 @@ const Registro = ({ state: { userData } }) => {
         consulta: 'Agende sua consulta'
     })
 
+    React.useEffect(_ => {
+        const userData = state.userData
+        if (userData['_id'])
+            setUserData({
+                ...userData,
+                atualizado: true
+            })
+    }, [state])
+
     React.useEffect(() => {
-        if (userData['_id']) {
+        if (userData.atualizado) {
+            console.log(userData, 'oi')
             api.getPetAppointment(userData['_id']).then(appointments => {
                 setAppointments(appointments)
             })
-            setCards([...parsePets(userData.Animais), ...parsePets(userData.Animais)])
+            setCards(parsePets(userData.Animais))
+            setMaxSwipes(userData.Animais.length - carrouselLen - 1)
             const petInfo = parsePets(
                 [userData.Animais[selectedGrid]])[0]
             setPetInfo({
@@ -64,14 +76,13 @@ const Registro = ({ state: { userData } }) => {
 
     React.useEffect(_ => {
         if (userData['_id']) {
-            console.log(PetInfo.nome)
             const petInfo = parsePets(
-                [userData.Animais[selectedGrid % 2]]
+                [userData.Animais[selectedGrid % cards.length]]
             )[0]
             setPetInfo({
                 ...petInfo,
-                consulta: appointments[petInfo.nome] ? new Date(appointments[petInfo.nome].Data).toLocaleDateString('pt-BR') 
-                : appointments.len ? 'Nenhuma consulta' : 'Carregando'
+                consulta: appointments[petInfo.nome] ? new Date(appointments[petInfo.nome].Data).toLocaleDateString('pt-BR')
+                    : appointments.len ? 'Nenhuma consulta' : 'Carregando'
             })
         }
 
@@ -117,6 +128,29 @@ const Registro = ({ state: { userData } }) => {
         )
     )
 
+    const handleDelete = _ => {
+        api.removePet(userData['_id'], PetInfo.nome).then(e => {
+            alert('acho q foi')
+            const Animais = userData.Animais.filter(a => a.Nome !== PetInfo.nome)
+            const aux = Animais.length - carrouselLen - 1
+            const swipes = aux < 0 ? 0 : aux
+            const user = {
+                ...userData,
+                Animais,
+                atualizado: false
+            }
+            setUserData(user)
+            setCards([...parsePets(Animais)])
+            setMaxSwipes(swipes || -1)
+            alert('Removido com sucesso')
+            setSelectedGrid((page * swipes))
+            localStorage.setItem('Petshop', JSON.stringify({
+                type: 'user',
+                user
+            }))
+        })
+    }
+
     return (
         <section id="registro-section">
             <div id="registro-section-container">
@@ -158,9 +192,12 @@ const Registro = ({ state: { userData } }) => {
                     <div className="info-pet">
                         <div id="titulo"> <h1> Informações do Pet </h1> </div>
                         <div id="info">
-                            <div> Nome: {PetInfo.nome} </div>
-                            <div> Idade: {parseAge(PetInfo.nasc)}</div>
-                            <div> Tipo: {PetInfo.img} </div>
+                            <div> Nome: <input type="text" value={PetInfo.nome} /> </div>
+                            <div> Idade: <input type="text" value={parseAge(PetInfo.nasc)} /></div>
+                            <div> Tipo: <input type="text" value={PetInfo.img} /> </div>
+                            <div className="actions-btn">
+                                <button onClick={handleDelete}>Remover registro</button>
+                            </div>
                         </div>
                     </div>
 
@@ -173,7 +210,7 @@ const Registro = ({ state: { userData } }) => {
                 </div>
 
                 <div className="registrar-btn">
-                    <button> Registrar novo Pet </button>
+                    <a href="/perfil/registrar-pet"> Registrar novo Pet </a>
                     <hr />
                 </div>
 

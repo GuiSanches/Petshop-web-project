@@ -35,8 +35,8 @@ const matches = (obj, source) =>
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
     const [load, setLoaded] = React.useState(false)
-    const [type, setType] = React.useState('user')
-    const [isMounted, setIsMounter] = React.useState(false)
+    const [type, setType] = React.useState('admin')
+    // const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
         let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
@@ -46,7 +46,7 @@ export function UserContext(props) {
             setLoaded(true)
             // alert('OI')
         }
-    }, [isMounted])
+    }, [])
 
     const setUserAdmin = userData => {
         setType('admin')

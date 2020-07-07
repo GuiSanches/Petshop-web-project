@@ -52,6 +52,11 @@
 }
 
 #info {
+    input {
+        width: auto;
+        border-top: none;
+        border-left: none;
+    }
     div {
         margin: 0.5em 0;
     }
@@ -66,16 +71,35 @@
     }
 }
 
+.actions-btn {
+    display: flex;
+    // border: 1px solid red;
+    justify-content: space-between;
+    button {
+        cursor: pointer;
+        background-color: #FDF2BB;
+        border: none;
+        border-radius: 5px;
+        padding: 0.4em 0.6em;
+        box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+}
+
 .registrar-btn {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    button {
+    a {
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
         width: 170px;
         border: none;
         background-color: #FFF069;
+        box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+        color: #333333;
         padding: 0.3em 0.6em;
         font-size: 1.1em;
         cursor: pointer;

@@ -11,7 +11,8 @@ const AppointmentDetail = props => {
             const AppointmentID = window.location.pathname.split('/')[3]
 
             api.getAppointmentDetail(AppointmentID).then(data => {
-                const { Animal, Cliente, Data, Descricao, Veterinario, _id } = data
+                console.log(data)
+                const { Animal, Cliente, Data, Descricao, Veterinario, _id } = data[0]
                 setAppInfo({
                     Animal,
                     Cliente: Cliente[0],

@@ -29,12 +29,12 @@ const TopBar = () => {
 const NavItens = _ => {
   const NavItens = [
     {
-      link: '/consulta',
+      link: '/perfil/agendamentos',
       content: 'Agendar Consulta'
     },
     {
-      link: '/pedidos',
-      content: 'Meus Pedidos'
+      link: '/perfil/carrinho-compras',
+      content: 'Meu Carrinho'
     },
     {
       link: '/account/login',

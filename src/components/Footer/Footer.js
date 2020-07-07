@@ -44,7 +44,7 @@ const LeftSide = props => {
 const RightSide = props => {
     const generateSocialMediasBtns = SocialMedias => SocialMedias.map(
         SocialMedia => (
-            <a className="social-media-btn" href={SocialMedia.link} key={SocialMedia.classBtn}>
+            <a className="social-media-btn" href={SocialMedia.link} key={SocialMedia.classBtn} rel="noopener noreferrer" target="_blank">
                 <i className={SocialMedia.classBtn}></i>
             </a>
         ))
@@ -54,7 +54,7 @@ const RightSide = props => {
             <div className="footer-inner-links">
                 <h3>Links úteis</h3>
                 {props.links.map(v => (
-                    <a className="footer-link" href={v.link} key={v.label}>{v.label}</a>
+                    <a className="footer-link" href={v.link} key={v.label} rel="noopener noreferrer" target="_blank">{v.label}</a>
                 ))}
             </div>
             <div className="footer-social-medias">

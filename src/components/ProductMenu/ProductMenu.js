@@ -164,6 +164,13 @@ const SearchProduct = ({ onFilterChange }) => {
 }
 
 const ProductsGrid = ({ cards }) => {
+    const { Products } = React.useContext(ProductCtx)
+
+    React.useEffect(() => {
+        return () => {
+            localStorage.setItem('Products', JSON.stringify(Products))
+        }
+    }, [Products])
 
     const ProductCard = ({ card }) => {
         const { setProducts } = React.useContext(ProductCtx)

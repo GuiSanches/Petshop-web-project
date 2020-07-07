@@ -195,7 +195,6 @@ const getAppointmentPet = async Id => {
             $limit: 1
         }
     ]).next()
-    console.log('a', resp, 'a')
 
     const NearestDateByPet = {}
     let len = 0
@@ -250,8 +249,36 @@ const AddPurchase = async Products => {
     return db.collection('compras').insertMany(data)
 }
 
-const getUserPets = async Id => {
+const AddPet = async (PetData, id) => {
+    const { name, tipo, date, porte } = PetData
+    const data = {
+        Nome: name,
+        Nascimento: new Date(date),
+        Especie: tipo,
+        Porte: porte,
+        Situacao: ''
+    }
+    return db.collection('users').updateOne(
+        { _id: new ObjectID(id) },
+        {
+            $push: {
+                Animais: data
+            }
+        }
+    )
+}
 
+const RemovePet = async (PetName, _id) => {
+    return db.collection('users').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $pull: {
+                Animais: {
+                    Nome: PetName
+                }
+            }
+        }
+    )
 }
 
 module.exports = {
@@ -264,6 +291,8 @@ module.exports = {
     getServices,
     AddProduct,
     AddService,
+    AddPet,
+    RemovePet,
     updateProduct,
     updateService,
     deleteProduct,

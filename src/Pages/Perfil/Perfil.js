@@ -14,6 +14,7 @@ import AddClient from '../../components/AddClient/AddClient'
 import AddAdmin from '../../components/AddAdmin/AddAdmin';
 import api from '../../components/Db/Db'
 import RegistroPet from '../../components/registroPet/registroPet';
+import AddPet from '../../components/AddPet/AddPet';
 
 const InfoForm = ({ info }) => {
     return (
@@ -131,7 +132,7 @@ const Perfil = props => {
             },
             {
                 label: "Registro de pet",
-                ref: '/'
+                ref: '/perfil/registrar-pet'
             }
         ]
         const AdminActions = [
@@ -205,7 +206,6 @@ const Perfil = props => {
     }
 
     const ProfilePage = props => {
-        const [isMounted, setIsMounted] = React.useState()
         const [events, setEvents] = React.useState([])
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
@@ -239,7 +239,7 @@ const Perfil = props => {
         ]
 
         React.useEffect(_ => {
-            console.log(window.location.pathname, userData)
+            // console.log(window.location.pathname, userData)
             if (!userData.isDefault && window.location.pathname === '/perfil/agendamentos') {
                 api.getAllFutureAppointments().then(e => {
                     alert('Carregado com sucesso')
@@ -249,7 +249,7 @@ const Perfil = props => {
                     alert('o-ou')
                 })
             }
-        }, [isMounted])
+        }, [])
 
         return (
             <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' ? 'calendar' : ''}`}>
@@ -266,6 +266,9 @@ const Perfil = props => {
                         </Route>
                         <Route exact path="/perfil/servicos">
                             <ServicosBoxLog title="Serviços" headerLabels={headerLabelsService} />
+                        </Route>
+                        <Route exact path="/perfil/registrar-pet">
+                            <AddPet title="Cadastro" />
                         </Route>
                         <Route exact path="/perfil/pets">
                             <RegistroPet />

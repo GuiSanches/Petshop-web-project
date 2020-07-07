@@ -9,6 +9,7 @@ const api = axios.create({
 });
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// axios.defaults.headers.delete['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.withCredentials = true;
 axios.defaults.crossDomain = true;
 
@@ -43,6 +44,11 @@ const backend = {
     AddService: async (data) => {
         const resp = await api.post('/services', { data })
     },
+    AddPet: async (PetData, userId) => {
+        const resp = await api.post(`/pets/${userId}`, { PetData })
+
+        return resp.data
+    },
     getProducts: async _ => {
         const resp = await api.get(`/products`)
 
@@ -70,6 +76,16 @@ const backend = {
     },
     deleteService: async _id => {
         const resp = await api.post(`/services/delete${_id}`)
+
+        return resp.data
+    },
+    removePet: async (id, PetName) => {
+        console.log(PetName)
+        const resp = await api.delete(`/pets/${id}`, {
+            params: {
+                PetName
+            }
+        })
 
         return resp.data
     },
