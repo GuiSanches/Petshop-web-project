@@ -1,7 +1,7 @@
 const assert = require('assert');
-
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient;
+const ObjectID = mongodb.ObjectID
 let client;
 let db;
 const Crypto = require('./Crypto');
@@ -71,6 +71,59 @@ const getProducts = async _ => {
     return db.collection('produtos').find({}).toArray()
 }
 
+const getServices = async _ => {
+    return db.collection('servicos').find({}).toArray()
+}
+
+const AddProduct = async data => {
+    return db.collection('produtos').insertOne(data)
+}
+
+const AddService = async data => {
+    return db.collection('servicos').insertOne(data)
+}
+
+
+const updateProduct = async (_id, data) => {
+    return db.collection('servicos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: data
+        }
+    )
+}
+
+const updateService = async (_id, data) => {
+    return db.collection('servicos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: data
+        }
+    )
+}
+
+const deleteProduct = async _id => {
+    return db.collection('produtos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: {
+                deleted: true
+            }
+        }
+    )
+}
+
+const deleteService = async _id => {
+    return db.collection('servicos').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $set: {
+                deleted: true
+            }
+        }
+    )
+}
+
 const getProductsHighlights = async _ => {
     return db.collection('ofertas').aggregate([{
         "$lookup": {
@@ -86,6 +139,86 @@ const getPromotions = async _ => {
     return db.collection('destaques').find({}).toArray()
 }
 
+const getAppointmentInfo = Id => {
+    return db.collection('consultas').aggregate([
+        {
+            $match: { _id: new ObjectID(Id) }
+        },
+        {
+            "$lookup": {
+                from: 'users',
+                localField: 'Cliente',
+                foreignField: '_id',
+                as: 'Cliente'
+            }
+        },
+        {
+            "$lookup": {
+                from: 'veterinarios',
+                localField: 'Veterinario',
+                foreignField: '_id',
+                as: 'Veterinario'
+            }
+        },
+        {
+            $project: {
+                Cliente: {
+                    Senha: 0,
+                },
+                Veterinario: {
+                    Senha: 0
+                }
+            }
+        }
+    ]).toArray()
+}
+
+const getAppointmentPet = async Id => {
+    const resp = await db.collection('users').aggregate([
+        {
+            $match: { _id: new ObjectID(Id) }
+        },
+        {
+            "$lookup": {
+                from: 'consultas',
+                localField: 'Animais.Nome',
+                foreignField: 'Animal',
+                as: 'consultas'
+            }
+        },
+        {
+            $project: {
+                consultas: 1
+            }
+        },
+        {
+            $limit: 1
+        }
+    ]).next()
+
+    const NearestDateByPet = {}
+    let len = 0
+
+    //Set nearest Date by Pet
+    resp.consultas.forEach(a => {
+        let Nearest = new Date(a.Data)
+        let diff = new Date().getTime() - Nearest.getTime()
+        if (diff > 0) return // Pass date
+        if (!(a.Animal in NearestDateByPet)) {
+            NearestDateByPet[a.Animal] = a
+            len++
+        } else {
+            Nearest = new Date(NearestDateByPet[a.Animal].Data)
+            diff = new Date(a.Data).getTime() - Nearest.getTime()
+            if (diff < 0)
+                NearestDateByPet[a.Animal] = a
+        }
+    })
+
+    NearestDateByPet['len'] = len
+
+    return NearestDateByPet
+}
 const getAllFutureBook = async _ => {
     return db.collection('consultas').find({
         Data: {
@@ -104,6 +237,50 @@ const bookAppointment = async ({ ClientData, PetData }) => {
     })
 }
 
+const AddPurchase = async Products => {
+    const data = Products.map(product => ({
+        Cliente: new ObjectID(product.userId),
+        Produto: new ObjectID(product._id),
+        Quantidade: 1,
+        PrecoUnitario: product.Preco,
+        Date: new Date(product.Date)
+    }))
+
+    return db.collection('compras').insertMany(data)
+}
+
+const AddPet = async (PetData, id) => {
+    const { name, tipo, date, porte } = PetData
+    const data = {
+        Nome: name,
+        Nascimento: new Date(date),
+        Especie: tipo,
+        Porte: porte,
+        Situacao: ''
+    }
+    return db.collection('users').updateOne(
+        { _id: new ObjectID(id) },
+        {
+            $push: {
+                Animais: data
+            }
+        }
+    )
+}
+
+const RemovePet = async (PetName, _id) => {
+    return db.collection('users').updateOne(
+        { _id: new ObjectID(_id) },
+        {
+            $pull: {
+                Animais: {
+                    Nome: PetName
+                }
+            }
+        }
+    )
+}
+
 module.exports = {
     initialize,
     signIn,
@@ -111,11 +288,23 @@ module.exports = {
     signUpAdmin,
     getCartById,
     getProducts,
+    getServices,
+    AddProduct,
+    AddService,
+    AddPet,
+    RemovePet,
+    updateProduct,
+    updateService,
+    deleteProduct,
+    deleteService,
     getProductsHighlights,
+    getAppointmentInfo,
+    getAppointmentPet,
     bookAppointment,
     getPromotions,
     getAllFutureBook,
-    destroy
+    AddPurchase,
+    destroy,
 }
 
 

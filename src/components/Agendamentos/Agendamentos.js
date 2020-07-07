@@ -2,10 +2,12 @@ import React from 'react'
 import Calendar from '../Calendar/Calendar'
 import './Agendamentos.scss'
 import api from '../Db/Db'
+import { Route, Switch, Link } from 'react-router-dom'
 import { UserCtx } from '../context/UserCtx'
+import AppointmentDetail from '../AppointmentInfo/AppointmentInfo'
 
 
-const Agendamento = ({ title, changeFather, Events }) => {
+const Agendamento = ({ title, changeFather, Events, ...props }) => {
     const [date, setDate] = React.useState("Selecione uma data")
     const [hour, setHour] = React.useState("HH:MM")
     const [petName, setPetName] = React.useState("nome")
@@ -33,27 +35,34 @@ const Agendamento = ({ title, changeFather, Events }) => {
             { petName, reason }
         ).then(e => alert("Consulta agendada com sucesso"))
         alert("Sua consulta está sendo agendada :) Não saia da pagina enquanto isso")
-    }
-
-    React.useEffect(_ => {
-        changeFather("calendar")
-    })
+    }   
 
     return (
         <div className="agendamento-container">
-            <Calendar handleBook={handleBook} Events={Events} />
+            <Switch>
+                <Route exact path="/perfil/agendamentos">
+                    <Calendar handleBook={handleBook} Events={Events} />
 
-            <div className="agendamento-info">
-                <div className="click-info">
-                    <h4>Data agendada: {date}</h4>
-                    <h4>Horário: {hour}</h4>
-                    <h4>Nome do pet: <input className="bookInput" onChange={event => handleInputChange(setPetName, event)} value={petName} /></h4>
-                    <h4>Motivo: <input className="bookInput" onChange={event => handleInputChange(setReason, event)} value={reason} /></h4>
-                </div>
-                <div className="btn-add-container">
-                    <button className="btn-add" onClick={handleClick}>Confirmar novo agendamento</button>
-                </div>
-            </div>
+                    <div className="agendamento-info">
+                        <div className="click-info">
+                            <h4>Data agendada: {date}</h4>
+                            <h4>Horário: {hour}</h4>
+                            <h4>Nome do pet: <input className="bookInput" onChange={event => handleInputChange(setPetName, event)} value={petName} /></h4>
+                            <h4>Motivo: <input className="bookInput" onChange={event => handleInputChange(setReason, event)} value={reason} /></h4>
+                        </div>
+                        <div className="btn-add-container">
+                            <button className="btn-add" onClick={handleClick}>Confirmar novo agendamento</button>
+                        </div>
+                    </div>
+                </Route>
+
+                <Route path="/perfil/agendamentos">
+                    <AppointmentDetail />
+                </Route>
+            </Switch>
+
+
+
         </div>
     )
 }

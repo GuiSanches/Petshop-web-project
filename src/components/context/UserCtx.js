@@ -1,4 +1,6 @@
 import React from 'react'
+import ProductContext from './ProductsCtx';
+
 export const TOKEN_KEY = "Petshop";
 
 const commonData = {
@@ -12,7 +14,7 @@ const commonData = {
 }
 
 const defaultUserData = {
-    isDefault: false,
+    isDefault: true,
     Telefone: '9999999999',
     signo: 'leaozinho',
     Animais: [],
@@ -25,13 +27,16 @@ const defaultAdminData = {
 }
 
 export const UserCtx = React.createContext(defaultUserData)
+const UserCtxProvider = UserCtx.Provider
+const UserCtxConsumer = UserCtx.Consumer
 const matches = (obj, source) =>
-  Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
+    Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
 
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
     const [load, setLoaded] = React.useState(false)
     const [type, setType] = React.useState('admin')
+    // const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
         let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
@@ -39,8 +44,9 @@ export function UserContext(props) {
             user = user.user
             setUserData(user)
             setLoaded(true)
-        }        
-    }, [load])
+            // alert('OI')
+        }
+    }, [])
 
     const setUserAdmin = userData => {
         setType('admin')
@@ -57,12 +63,20 @@ export function UserContext(props) {
         else setUserAdmin(data)
     }
     return (
-        <UserCtx.Provider value={{
+        <UserCtxProvider value={{
             type,
             userData,
             setUserByType
         }}>
-            {props.children}
-        </UserCtx.Provider>
+            <ProductContext>
+                {props.children}
+            </ProductContext>
+        </UserCtxProvider>
     )
 }
+
+export const UserCtxHOC = Component => props => (
+    <UserCtxConsumer>
+        {state => <Component  {...props} state={state}/>}
+    </UserCtxConsumer>
+)

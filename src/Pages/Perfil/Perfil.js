@@ -8,12 +8,13 @@ import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
 import BoxLog from '../../components/BoxLog/BoxLog'
 import InventoryBoxLog from '../../components/BoxLog/InventoryBoxLog'
 import HistoryBoxLog from '../../components/BoxLog/HistoryBoxLog'
+import ServicosBoxLog from '../../components/BoxLog/ServicosBoxLog'
 import Agendamentos from '../../components/Agendamentos/Agendamentos'
 import AddClient from '../../components/AddClient/AddClient'
 import AddAdmin from '../../components/AddAdmin/AddAdmin';
 import api from '../../components/Db/Db'
-
-
+import RegistroPet from '../../components/registroPet/registroPet';
+import AddPet from '../../components/AddPet/AddPet';
 
 const InfoForm = ({ info }) => {
     return (
@@ -60,9 +61,6 @@ const generateAdminActions = actions => {
 const Perfil = props => {
     const { userData, type, setUserByType } = React.useContext(UserCtx)
 
-    const parseDate = date => {
-
-    }
     const generateUserInfo = userInfo => {
         const birth = new Date(userInfo.Nascimento)
         const signos = ['Aquário', 'Peixes', 'Áries', 'Touro', 'Gêmeos', 'Câncer', 'Leão', 'Virgem', 'Libra', 'Escorpião', 'Sagitário', 'Capricórnio']
@@ -101,7 +99,6 @@ const Perfil = props => {
             </div>
         )
     }
-
     const generateAdminInfo = userInfo => {
         return (
             <div className="info-box">
@@ -118,12 +115,24 @@ const Perfil = props => {
                 ref: '/perfil/historico-compras'
             },
             {
+                label: "Carrinho de compras",
+                ref: '/perfil/carrinho-compras'
+            },
+            {
                 label: "Agendamentos",
                 ref: '/perfil/agendamentos'
             },
             {
+                label: "Serviços",
+                ref: '/perfil/servicos'
+            },
+            {
+                label: "Meus Pets",
+                ref: '/perfil/pets'
+            },
+            {
                 label: "Registro de pet",
-                ref: '/'
+                ref: '/perfil/registrar-pet'
             }
         ]
         const AdminActions = [
@@ -140,8 +149,8 @@ const Perfil = props => {
                 ref: '/perfil/inventario'
             },
             {
-                label: "Adicionar novo serviço",
-                ref: '/'
+                label: "Serviços",
+                ref: '/perfil/servicos'
             },
             {
                 label: "Meus agendamentos",
@@ -149,7 +158,7 @@ const Perfil = props => {
             }
         ]
         const [action, setAction] = React.useState(generateUserActions(userActions))
-        const [generateInfo, setgenerateInfo] = React.useState('vazio')
+        const [generateInfo, setgenerateInfo] = React.useState('Carregando...')
 
         React.useEffect(() => {
             if (type === 'user') {
@@ -197,7 +206,6 @@ const Perfil = props => {
     }
 
     const ProfilePage = props => {
-        const [class_, setClass_] = React.useState("");
         const [events, setEvents] = React.useState([])
         //  Get data from storage first 
         // const { userData, type } localstorage.getItem(TOKEN_KEY)
@@ -224,8 +232,15 @@ const Perfil = props => {
             'Preço Un'
         ]
 
+        const headerLabelsService = [
+            'Código',
+            'Nome',
+            'Preço'
+        ]
+
         React.useEffect(_ => {
-            if (class_ !== '') {
+            // console.log(window.location.pathname, userData)
+            if (!userData.isDefault && window.location.pathname === '/perfil/agendamentos') {
                 api.getAllFutureAppointments().then(e => {
                     alert('Carregado com sucesso')
                     setEvents(e)
@@ -234,9 +249,10 @@ const Perfil = props => {
                     alert('o-ou')
                 })
             }
-        }, [class_])
+        }, [])
+
         return (
-            <div className={`Perfil-container ${class_}`}>
+            <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' ? 'calendar' : ''}`}>
                 {userData.isDefault ? <p>Faça login cara de pastel</p> :
                     <Switch>
                         <Route exact path="/perfil/carrinho-compras">
@@ -245,9 +261,19 @@ const Perfil = props => {
                         <Route exact path="/perfil/historico-compras">
                             <HistoryBoxLog title="Historico de compras" headerLabels={headerLabelsHistory} />
                         </Route>
-                        <Route exact path="/perfil/agendamentos">
-                            <Agendamentos title="Inventário" changeFather={setClass_} Events={events} />
+                        <Route path="/perfil/agendamentos">
+                            <Agendamentos title="Inventário" Events={events} />
                         </Route>
+                        <Route exact path="/perfil/servicos">
+                            <ServicosBoxLog title="Serviços" headerLabels={headerLabelsService} />
+                        </Route>
+                        <Route exact path="/perfil/registrar-pet">
+                            <AddPet title="Cadastro" />
+                        </Route>
+                        <Route exact path="/perfil/pets">
+                            <RegistroPet />
+                        </Route>
+
                         {type === 'admin' &&
                             <Route exact path="/perfil/cadastrar-cliente">
                                 <AddClient title="Cadastro" />

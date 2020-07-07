@@ -17,6 +17,8 @@ const generateList = arrayProducts => arrayProducts.map(el => {
         Price: item.Price
     }))
 
+    console.log(el.history)
+
     return rowItemData.map(r => generateRow(r))
 })
 
@@ -26,7 +28,7 @@ const generateRow = rowData => {
         rowData.item,
         rowData.Nome,
         rowData.Qtd,
-        `R$ ${rowData.Price['$numberDecimal']}`
+        `R$ ${rowData.Price}`
     ]
 
     return generateItem(RowArray)
@@ -60,13 +62,13 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const { userData, type } = React.useContext(UserCtx)
 
     React.useEffect(() => {
-        if (userData._id && loading) {
+        if (userData._id) {
             Db.getProductsShopLog(userData._id).then(e => {
                 setCart(e)
                 setLoading(false)
             })
         }
-    }, [loading])
+    }, [])
     return (
         <div className="box-info">
             <div className="box-container">

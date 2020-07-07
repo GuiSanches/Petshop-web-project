@@ -30,7 +30,7 @@ const Atendimento = props => {
                         <p>{card.name}</p>
                         <p>R$: {card.price}</p>
                     </div>
-                    <a className="card-btn" href="">{card.btn}</a>
+                    <a className="card-btn" href="/contato">{card.btn}</a>
                 </div>
             )
         })

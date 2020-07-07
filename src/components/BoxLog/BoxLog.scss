@@ -24,7 +24,9 @@ $radius: 14px;
 
 .box-header {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     width: 100%;
     background-color: #FFDC27;
     border-top-left-radius: $radius;
@@ -49,10 +51,12 @@ $radius: 14px;
 
 .box-grid {
     display: grid;
-    grid-template-columns: 6.3em 4em auto 3em 7em;
+    grid-template-columns: 7em 4em auto 3em 7em;
 
     .item-1 {
         border: none !important;
+        display: flex;
+        justify-content: flex-start !important;
     }
     .item {
         display: flex;
@@ -62,6 +66,30 @@ $radius: 14px;
         align-items: center;
         justify-content: center;
         font-size: 0.9em;
+    }
+
+    .item-x {
+        background-color: red;
+        padding: 0.1em 0.2em;
+        border-radius: 80%;
+        margin: 0 0.2em;
+
+        &:hover {
+            background-color: green;
+            cursor: pointer
+        }
+    }
+}
+
+.grid-service {
+    grid-template-columns: 7em  auto 7em;
+}
+
+.container-service {
+    width: 80%;
+
+    #buy-store {
+        padding: .5em 2.5em;
     }
 }
 
@@ -75,6 +103,41 @@ $radius: 14px;
         font-weight: 500;
         font-family: 'Reem Kufi';
         margin: 0;
+    }
+}
+
+.box-edit-popup {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(253, 175, 123, 0.94);
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 19em;
+    // height: 9em;
+    border-radius: 5px;
+    position: absolute;
+    // bottom: 50%;
+
+    span {
+        display: flex;
+        justify-content: space-between;
+        align-self: flex-start;
+        margin: 0.4em 0;
+        padding: 0 0.3em;
+        // border: 1px solid red;
+        width: 96%;
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    button {
+        justify-self: flex-end;
+        display: flex;
     }
 }
 
