@@ -111,7 +111,6 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const handleClick = action => {
         switch (action) {
             case 'Edit':
-                console.log('Edit', EditLayout)
                 setPopUpInputs([...EditLayout])
                 setPopUpType('Edit')
                 break
@@ -143,12 +142,11 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                     inputParse[7] = inputParse[7].split(',')
                     let idx = 0
                     for (let i in Product) {
-                        console.log(i, 'i')
                         Product[i] = inputParse[idx++]
                     }
                     Product = { _id, ...Product }
-                    console.log(inputParse)
                     api.updateProduct(Product).then(e => {
+                        console.log(Product, 'oi')
                         setInventory(undefined)
                         alert('Produto atualizado com sucesso')
                     })
@@ -164,12 +162,12 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                     console.log(_id, Product, inputParse)
                     inputParse = inputParse.map(i => {
                         let value = i[1]
-                        if(value === '') throw new Error('Campo invalido')
+                        if (value === '') throw new Error('Campo invalido')
                         return i[1]
                     })
                     inputParse[2] = parseFloat(inputParse[2])
                     inputParse[3] = parseInt(inputParse[3])
-                    if(!inputParse[2] || !inputParse[3]) throw new Error('Campo invalido')
+                    if (!inputParse[2] || !inputParse[3]) throw new Error('Campo invalido')
                     inputParse[7] = inputParse[7].split(',')
                     let idx = 0
                     for (let i in Product) {

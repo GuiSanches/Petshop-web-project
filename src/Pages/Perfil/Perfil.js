@@ -179,7 +179,6 @@ const Perfil = props => {
                     </div>
                     <div className="foto-box">
                         <img src={require(`../../Images/users/${userData.Foto}`)} alt="Foto de perfil" />
-                        <p>Alterar foto de perfil</p>
                     </div>
                 </div>
 

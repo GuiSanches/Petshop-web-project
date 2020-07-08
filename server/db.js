@@ -29,13 +29,13 @@ const signIn = async (email, password) => {
 const signUpClient = async (userData) => {
     const pass = await Crypto.Encrypt(userData.Senha)
     userData.Senha = pass
-    return db.collection('users').insertOne(userData)
+    return db.collection('users').insertOne({ type: 'user', ...userData })
 }
 
 const signUpAdmin = async (adminData) => {
     const pass = await Crypto.Encrypt(adminData.Senha)
     adminData.Senha = pass
-    return db.collection('veterinarios').insertOne(adminData)
+    return db.collection('veterinarios').insertOne({ type: 'admin', ...adminData })
 }
 
 const getShopBoughtById = async id => db.collection('compras').find(
@@ -85,7 +85,7 @@ const AddService = async data => {
 
 
 const updateProduct = async (_id, data) => {
-    return db.collection('servicos').updateOne(
+    return db.collection('produtos').updateOne(
         { _id: new ObjectID(_id) },
         {
             $set: data
