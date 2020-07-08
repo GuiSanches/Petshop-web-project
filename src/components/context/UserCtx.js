@@ -35,7 +35,7 @@ const matches = (obj, source) =>
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
     const [load, setLoaded] = React.useState(false)
-    const [type, setType] = React.useState('admin')
+    const [type, setType] = React.useState('user')
     // const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
@@ -43,6 +43,7 @@ export function UserContext(props) {
         if (!load && user) {
             user = user.user
             setUserData(user)
+            setType(user.type)
             setLoaded(true)
             // alert('OI')
         }

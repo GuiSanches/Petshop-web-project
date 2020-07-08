@@ -26,20 +26,22 @@ const ProductsPage = ({ title, search }) => {
         }).catch(e => console.log(e))
     }, [])
 
-    React.useEffect(() => {
-        console.log(cardsBack, 'trocou')
-    }, [cardsFilter])
-
-    const handleFilter = item => {
+    const handleFilterDropdown = item => {
         const filter = item.filter([...cardsBack])
-        console.log(item, filter)
         setCardsFilter(filter)
+    }
+
+    const handleInputChange = search => {
+        if (cardsBack !== null) {
+            const filter = cardsBack.filter(p => p.Nome.includes(search))
+            setCardsFilter(filter.length > 0 ? filter : cardsBack)
+        }
     }
 
     return (
         <div className="Products-container">
             <h1 className="Products-title">{title}</h1>
-            <SearchProduct onFilterChange={handleFilter} />
+            <SearchProduct onFilterChange={handleFilterDropdown} onInputChange={handleInputChange} />
             <ProductsGrid cards={cardsFilter} />
         </div>
     );
@@ -47,10 +49,10 @@ const ProductsPage = ({ title, search }) => {
 
 const HandleFilters = {
     HighPrice: price => {
-        return price.sort((a, b) => b.Preco['$numberDecimal'] - a.Preco['$numberDecimal'])
+        return price.sort((a, b) => b.price - a.price)
     },
     LowPrice: price => {
-        return price.sort((a, b) => a.Preco['$numberDecimal'] - b.Preco['$numberDecimal'])
+        return price.sort((a, b) => a.price - b.price)
     },
     Relevance: relevance => {
         return relevance.sort((a, b) => a.Estoque - b.Estoque)
@@ -103,11 +105,12 @@ const options = [
 ]
 
 
-const SearchProduct = ({ onFilterChange }) => {
+const SearchProduct = ({ onFilterChange, onInputChange }) => {
     const [filterOptions, setFilterOptions] = React.useState(options)
     const [selectedId, setSelectedId] = React.useState(-1)
     const [listOpen, setListOpen] = React.useState(false)
     const [selectedOption, setSelectedOption] = React.useState({ title: 'Nenhum filtro' })
+    const [search, setSearch] = React.useState('')
 
     const updateSelected = (item, id) => {
         setSelectedOption(item)
@@ -119,13 +122,13 @@ const SearchProduct = ({ onFilterChange }) => {
     const toggleSelected = (id) => {
         let temp = filterOptions
 
-        // Uncheck already selected
+        // Uncheck current selected
         if (selectedId !== -1) temp[selectedId].selected = false
 
-        // Remove already
+        // Remove current
         if (selectedId === id) {
             updateSelected({ title: 'Nenhum filtro' }, -1)
-        } else { // check filter
+        } else { // check new filter
             temp[id].selected = true
             updateSelected(temp[id], id)
         }
@@ -137,11 +140,21 @@ const SearchProduct = ({ onFilterChange }) => {
         setListOpen(!listOpen)
     }
 
+    const handleSearch = value => {
+        setSearch(value)
+        onInputChange(value)
+    }
+
     return (
         <div className="Search-container">
             <div className="Search-container-box">
                 <div className="input-box">
-                    <input className="nav-search" type="search" autoComplete="off" name="product-filter" placeholder="Pesquisar" />
+                    <input className="nav-search"
+                        value={search}
+                        onChange={e => handleSearch(e.target.value)}
+                        type="search" autoComplete="onn"
+                        name="product-filter"
+                        placeholder="Pesquisar" />
                 </div>
                 <div className="input-box">
                     <input

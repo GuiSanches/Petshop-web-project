@@ -13,7 +13,7 @@ const Agendamento = ({ title, changeFather, Events, ...props }) => {
     const [petName, setPetName] = React.useState("nome")
     const [reason, setReason] = React.useState("Motivo da visita")
     const [dateObj, setDateObj] = React.useState(null)
-    const { userData } = React.useContext(UserCtx)
+    const { userData, type } = React.useContext(UserCtx)
 
     const handleBook = bookData => {
         const months = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
@@ -35,7 +35,7 @@ const Agendamento = ({ title, changeFather, Events, ...props }) => {
             { petName, reason }
         ).then(e => alert("Consulta agendada com sucesso"))
         alert("Sua consulta está sendo agendada :) Não saia da pagina enquanto isso")
-    }   
+    }
 
     return (
         <div className="agendamento-container">
@@ -55,10 +55,15 @@ const Agendamento = ({ title, changeFather, Events, ...props }) => {
                         </div>
                     </div>
                 </Route>
+                {type === 'admin' ?
+                    <Route path="/perfil/agendamentos">
+                        <AppointmentDetail />
+                    </Route> :
+                    <div className="agendamento-msg-box">
+                        Você precisa ser um administrador para acessar essa pagina. Veja suas consultas próximas em Meus Pets
+                    </div>
+                }
 
-                <Route path="/perfil/agendamentos">
-                    <AppointmentDetail />
-                </Route>
             </Switch>
 
 
