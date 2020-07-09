@@ -15,7 +15,10 @@ const SectionProduct = props => {
             return (
                 <div className="card-product" key={card + i}
                     style={{ backgroundImage: `url(${img})` }}>
-                    <h1>{card.title}</h1>
+                    <div className="card-product-title">
+                        <h1>{card.title}</h1>
+                    </div>
+
                     <div className="product-subtitle">
                         {card.content}
                     </div>

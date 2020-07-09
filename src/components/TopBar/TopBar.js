@@ -42,9 +42,16 @@ const NavItens = _ => {
     },
   ]
 
+  const handleLogout = _ => {
+    localStorage.clear()
+  }
+
   return (
     <div key={1} className="nav-actions">
       {NavItens.map((sessionItem, i) => <NavItem key={'nav-i_' + i} {...sessionItem} />)}
+      <div className="nav-item">
+        <a href='/account' onClick={handleLogout}>Sair</a>
+      </div>
     </div>
   )
 }

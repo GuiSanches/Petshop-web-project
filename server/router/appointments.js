@@ -6,7 +6,6 @@ router.get('/', async (req, res, next) => {
     try {
         await db.initialize()
         const resp = await db.getAllFutureBook()
-        console.log(resp)
         await db.destroy()
         res.send(resp)
     } catch (e) {

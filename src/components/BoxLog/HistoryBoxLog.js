@@ -17,8 +17,6 @@ const generateList = arrayProducts => arrayProducts.map(el => {
         Price: item.Price
     }))
 
-    console.log(el.history)
-
     return rowItemData.map(r => generateRow(r))
 })
 

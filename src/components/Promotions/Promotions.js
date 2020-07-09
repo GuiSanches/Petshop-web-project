@@ -15,7 +15,6 @@ const Promotions = props => {
 
     React.useEffect(() => {
         api.getPromotions().then(p => {
-            console.log(p, 'p')
             const cards = p.map(
                 p => ({
                     title: p.Titulo,

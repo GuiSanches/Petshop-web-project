@@ -80,7 +80,6 @@ const backend = {
         return resp.data
     },
     removePet: async (id, PetName) => {
-        console.log(PetName)
         const resp = await api.delete(`/pets/${id}`, {
             params: {
                 PetName

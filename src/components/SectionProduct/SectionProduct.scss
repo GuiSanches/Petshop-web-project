@@ -34,10 +34,21 @@ $card-radio: 150px;
     width: $card-radio;
     height: $card-radio;
     position: relative;
+    background-size: contain;
     align-items: center;
     h1 {
         font-size: 1.2em;
+        margin: 0;
+        padding: 0;
     }
+}
+
+.card-product-title {
+    color: white;
+    display: flex;
+    border-radius: 3%;
+    padding: 0.3em 0.1em;
+    background: linear-gradient(.1deg,rgba(27,22,26,.9),rgba(27,22,26,.2));
 }
 
 .product-subtitle {
@@ -49,6 +60,9 @@ $card-radio: 150px;
     background: linear-gradient(.1deg,rgba(27,22,26,.9),rgba(27,22,26,.2));
     color: #ffffff;
     font-size: 1em;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.2em;
     // justify-content: flex-end;
     // align-items: center;
 }
