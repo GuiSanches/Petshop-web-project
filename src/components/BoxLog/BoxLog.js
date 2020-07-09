@@ -9,9 +9,13 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     const { Products, setProducts, clear, setProduct } = React.useContext(ProductCtx)
     const { userData } = React.useContext(UserCtx)
     const [items_, setItems_] = React.useState(null)
+    const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
-        setProducts(JSON.parse(localStorage.getItem('Products')))
+        const products = JSON.parse(localStorage.getItem('Products'))
+        setLoading(false)
+        if (products)
+            setProducts(products)
     }, [])
 
     const parseItems = items => items.map(item => {
@@ -37,12 +41,16 @@ const BoxLog = ({ title, headerLabels, getData }) => {
         }
     }
 
-    const generateList = array => array.map((row, idx) => generateItem(row, idx))
+    const generateList = array => {
+        if (array[0])
+            return array.map((row, idx) => generateItem(row, idx))
+    }
     const handleRemove = idx => {
         let arr = [...Products]
         arr.splice(idx, 1)
         if (arr.length === 0) clear()
         else setProduct(arr)
+        localStorage.setItem('Products', JSON.stringify(arr))
     }
     const generateItem = (array, idx) => (
         <>
@@ -59,7 +67,8 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     )
 
     const calculatePrice = Products => {
-        return Products.reduce((acc, el) => acc + parseFloat(el.price), 0)
+        if (Products[0])
+            return Products.reduce((acc, el) => acc + parseFloat(el.price), 0)
     }
 
     return (
@@ -72,7 +81,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 <div className="box-grid-container">
                     <div className="box-grid"> {/* Grid */}
                         {generateBoxHeader(headerLabels)}
-                        {Products.length > 0 && generateList(parseItems(Products))}
+                        {!Products.length[0] && generateList(parseItems(Products))}
 
                     </div>
 

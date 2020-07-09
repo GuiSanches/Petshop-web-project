@@ -11,13 +11,13 @@ const Atendimento = props => {
             btn: "agendar"
         },
         {
-            name: "Banho",
-            price: "30,00",
+            name: "Tosa",
+            price: "45,00",
             btn: "agendar"
         },
         {
-            name: "Banho",
-            price: "30,00",
+            name: ".",
+            price: "60,00",
             btn: "agendar"
         }
     ]

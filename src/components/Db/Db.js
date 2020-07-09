@@ -95,7 +95,7 @@ const backend = {
         return resp.data
     },
     getPromotions: async _ => {
-        const resp = await api.get('/promotions')
+        const resp = await api.get('/products/promotions')
 
         return resp.data
     },

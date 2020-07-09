@@ -46,6 +46,27 @@ $card-radius: 95px;
     }
     .card-box:last-child .card-round {
         width: $card-radius + 45px !important;
+        justify-content: center;
+        align-items: center;
+
+        &::after {
+            white-space: pre;
+            content: 'COMBO \a  Banho + Tosa';
+        }
+    }
+
+    .card-box {
+        &:first-child {
+            .card-round {
+                background-image: url(../../Images/atendimento/shower.svg);                
+            }
+        }
+
+        &:nth-child(2){
+            .card-round {
+                background-image: url(../../Images/atendimento/scissor.svg);
+            }
+        }
     }
 
     .card-round {
@@ -53,8 +74,12 @@ $card-radius: 95px;
         width: $card-radius;
         height: $card-radius;
         border-radius: 50%;
-        background-color: #F78C2E;
+        background-color: #F78C2E;        
+        background-repeat: no-repeat;
+        background-size: contain;
     }
+
+ 
     #EF722E
     .card-info {
         display: flex;

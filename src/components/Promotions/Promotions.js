@@ -2,48 +2,33 @@ import React from 'react'
 import './Promotions.scss'
 import Hammer from "react-hammerjs"
 import { useState } from 'react'
-
-const cards = [{
-    title: "Banho e tosa 1",
-    message: "O tratamento perfeito para um pelo bonito e sedoso.",
-    price: "A partir de R$ 50,00",
-    btn: "Comprar",
-    link: "/"
-}, {
-    title: "Banho e tosa 2",
-    message: "Seu bichinho merece só as melhores guloseimas.",
-    price: "A partir de R$ 5,00",
-    btn: "Comprar",
-    link: "/"
-}, {
-    title: "Banho e tosa 3",
-    message: "Compre um novo brinquedo para seu pet e leve outro de brinde.",
-    price: "Para todos os produtos",
-    btn: "Comprar",
-    link: "/"
-},
-{
-    title: "Banho e tosa 4",
-    message: "Compre um novo brinquedo para seu pet e leve outro de brinde.",
-    price: "Para todos os produtos",
-    btn: "Comprar",
-    link: "/"
-},
-{
-    title: "Banho e tosa 5",
-    message: "Compre um novo brinquedo para seu pet e leve outro de brinde.",
-    price: "Para todos os produtos",
-    btn: "Comprar",
-    link: "/"
-}]
+import api from '../Db/Db'
 
 const Promotions = props => {
     const initialDegree = 2
     const rotateInc = 32
     const carrouselLen = 3
-    const maxSwipes = cards.length - carrouselLen - 1
+    const [cards, setCards] = useState()
+    const [maxSwipes, setMaxSwipes] = useState()
     const [rotationGrid, setRotationGrid] = useState(initialDegree) // degree rotate
-    const [selectedGrid, setSelectedGrid] = useState(1) // Element at center   
+    const [selectedGrid, setSelectedGrid] = useState(1) // Element at center
+
+    React.useEffect(() => {
+        api.getPromotions().then(p => {
+            console.log(p, 'p')
+            const cards = p.map(
+                p => ({
+                    title: p.Titulo,
+                    message: p.Conteudo,
+                    price: p.Subtitulo,
+                    btn: 'Comprar',
+                    link: '/produtos?product-q=',
+                    img: p.Imagem
+                }))
+            setCards(cards)
+            setMaxSwipes(cards.length - carrouselLen - 1)
+        })
+    }, [])
 
 
     const RotateLeft = _ => {
@@ -73,7 +58,7 @@ const Promotions = props => {
                                 onSwipeRight={RotateLeft} onSwipeLeft={RotateRight} >
                                 {/* 32% rotaion */}
                                 <div className="promotions-carrousel" style={{ transform: `translateX(${rotationGrid}%` }}>
-                                    {generateCards(cards, selectedGrid)}
+                                    {cards && generateCards(cards, selectedGrid)}
                                 </div>
                             </Hammer>
                         </div>
@@ -97,7 +82,7 @@ const generateCards = (cards, selectedGrid) => cards.map(
             <div className="p-card-wrap">
                 <h3 className="p-card-title">{card.title}</h3>
                 <div className="p-card-content">
-                    <div className="img"></div>
+                    <div className="img" style={{backgroundImage: `url(${require('../../Images/produtos/' + card.img)})`}}></div>
                     <p>{card.message}</p>
                     <p>{card.price}</p>
                 </div>

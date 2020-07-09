@@ -16,10 +16,22 @@ router.get('/', async (req, res, next) => {
         console.log(e)
     }
 })
+router.get('/promotions', async (req, res, next) => {
+    try {
+        await db.initialize()
+        let resp = await db.getPromotions()
+        console.log(resp)
+        await db.destroy()
+        res.send(resp)
+    } catch (e) {
+        console.log(e)
+    }
+})
 router.get('/highlights', async (req, res, next) => {
     try {
         await db.initialize()
         let resp = await db.getProductsHighlights()
+        console.log(resp)
         await db.destroy()
         res.send(resp)
     } catch (e) {

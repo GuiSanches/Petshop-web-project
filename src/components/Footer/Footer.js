@@ -11,9 +11,9 @@ const Footer = props => {
     }
 
     const links = [
-        { label: "Home", link: "#home" },
-        { label: "Banho e tosa", link: "#home" },
-        { label: "Produtos", link: "#home" }]
+        { label: "Home", link: "/#Home" },
+        { label: "Banho e tosa", link: "/contato" },
+        { label: "Produtos", link: "/produtos" }]
 
     const SocialMedias = [
         { classBtn: "fab fa-facebook", link: "https://facebook.com.br" },
@@ -54,7 +54,7 @@ const RightSide = props => {
             <div className="footer-inner-links">
                 <h3>Links úteis</h3>
                 {props.links.map(v => (
-                    <a className="footer-link" href={v.link} key={v.label} rel="noopener noreferrer" target="_blank">{v.label}</a>
+                    <a className="footer-link" href={v.link} key={v.label}>{v.label}</a>
                 ))}
             </div>
             <div className="footer-social-medias">

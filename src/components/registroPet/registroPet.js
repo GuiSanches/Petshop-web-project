@@ -57,7 +57,7 @@ const Registro = ({ state }) => {
     }, [state])
 
     React.useEffect(() => {
-        if (userData.atualizado) {
+        if (userData.atualizado && userData.Animais.lenght > 0) {
             console.log(userData, 'oi')
             api.getPetAppointment(userData['_id']).then(appointments => {
                 setAppointments(appointments)
@@ -75,7 +75,7 @@ const Registro = ({ state }) => {
     }, [userData])
 
     React.useEffect(_ => {
-        if (userData['_id']) {
+        if (userData['_id'] && userData.Animais.lenght > 0) {
             const petInfo = parsePets(
                 [userData.Animais[selectedGrid % cards.length]]
             )[0]
@@ -151,7 +151,7 @@ const Registro = ({ state }) => {
         })
     }
 
-    return (
+    return userData.Animais.lenght > 0 ? (
         <section id="registro-section">
             <div id="registro-section-container">
 
@@ -216,7 +216,8 @@ const Registro = ({ state }) => {
 
             </div>
         </section >
-    )
+    ) : <h2>Desculpe, não encontramos nenhum pet registrado nessa conta.</h2>
 }
 
 export default UserCtxHOC(RegistroPet)
+

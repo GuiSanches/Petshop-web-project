@@ -180,9 +180,7 @@ const ProductsGrid = ({ cards }) => {
     const { Products } = React.useContext(ProductCtx)
 
     React.useEffect(() => {
-        return () => {
-            localStorage.setItem('Products', JSON.stringify(Products))
-        }
+        localStorage.setItem('Products', JSON.stringify(Products))
     }, [Products])
 
     const ProductCard = ({ card }) => {
@@ -195,7 +193,7 @@ const ProductsGrid = ({ cards }) => {
             <div className="product-grid-item" key={card.name}>
                 <div className="P-card-product">
                     <div className="product-image">
-                        <img src={require(`../../Images/Icones/${card.Foto}`)} alt="Imagem produto" />
+                        <img src={require(`../../Images/produtos/${card.Foto}`)} alt="Imagem produto" />
                     </div>
                     <div className="product-info">
                         <p>{card.name}</p>
