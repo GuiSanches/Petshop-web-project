@@ -251,8 +251,8 @@ const Perfil = props => {
         }, [])
 
         return (
-            <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' ? 'calendar' : ''}`}>
-                {userData.isDefault ? <p>Faça login cara de pastel</p> :
+            <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' & !userData.isDefault ? 'calendar' : ''}`}>
+                {userData.isDefault ? <p>Você precisa estar logado para realizar essa ação</p> :
                     <Switch>
                         <Route exact path="/perfil/carrinho-compras">
                             <BoxLog title="Carrinho de compras" headerLabels={headerLabels} />

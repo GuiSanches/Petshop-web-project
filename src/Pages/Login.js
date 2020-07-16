@@ -25,7 +25,7 @@ const LoginPage = props => {
             e.preventDefault()
             alert('Aguarde')
             let user = await db.signIn(email, password)
-            alert('Foi')
+            alert('Bem vindo')
             if (user) {
                 setUserByType('user', user)
                 localStorage.setItem(TOKEN_KEY, JSON.stringify({ user, type: 'user' }))

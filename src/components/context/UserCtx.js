@@ -43,7 +43,7 @@ export function UserContext(props) {
         if (!load && user) {
             user = user.user
             setUserData(user)
-            setType(user.type)
+            // setType(user.type)
             setLoaded(true)
             // alert('OI')
         }

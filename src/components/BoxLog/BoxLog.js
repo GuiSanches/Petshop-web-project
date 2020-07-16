@@ -22,7 +22,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
         item['Qtd'] = 1
         return ([
             `${item.Estoque} unidades`,
-            <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
+            <div className="img cover" style={{backgroundImage: `url(${require('../../Images/produtos/' + item.Foto)})`}}></div>,
             item.Nome,
             item.Qtd,
             item.Preco,

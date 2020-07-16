@@ -134,7 +134,6 @@ const Registro = ({ state }) => {
 
     const handleDelete = _ => {
         api.removePet(userData['_id'], PetInfo.nome).then(e => {
-            alert('acho q foi')
             const Animais = userData.Animais.filter(a => a.Nome !== PetInfo.nome)
             const aux = Animais.length - carrouselLen - 1
             const swipes = aux < 0 ? 0 : aux

@@ -5,7 +5,7 @@ import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
 
 const generateList = arrayProducts => arrayProducts.map(el => {
     const commomProducts = {
-        item: <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
+        item: <div className="img cover" style={{backgroundImage: `url(${require('../../Images/produtos/' + el.Foto)})`}}></div>,
         Nome: el.Nome,
     }
 
@@ -76,7 +76,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 <div className="box-grid-container">
                     <div className="box-grid"> {/* Grid */}
                         {generateBoxHeader(headerLabels)}
-                        {loading ? 'carregando amigo' : generateList(cart)}
+                        {loading ? 'Carregando...' : generateList(cart)}
 
                     </div>
 

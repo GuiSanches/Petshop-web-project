@@ -99,14 +99,17 @@ const BoxLog = ({ title, headerLabels, getData }) => {
             } else setIsDisabled(true)
 
     }, [popUpInputs])
-
-    const ParseInventory = Inventory => Inventory.map(I => [
-        I._id.slice(0, ID_LEN),
-        <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
-        I.Nome,
-        I.Estoque,
-        I.Preco
-    ])
+//,
+    const ParseInventory = Inventory => Inventory.map(I => {
+        console.log(I)
+        return [
+            I._id.slice(0, ID_LEN),
+            <div className="img cover" style={{backgroundImage: `url(${require('../../Images/produtos/' + I.Foto)})`}}></div>,
+            I.Nome,
+            I.Estoque,
+            I.Preco
+        ]
+    })
 
     const handleClick = action => {
         switch (action) {

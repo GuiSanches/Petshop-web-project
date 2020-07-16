@@ -20,7 +20,7 @@ const AppointmentDetail = props => {
                     Veterinario: Veterinario[0],
                     _id
                 })
-                alert("FOI")
+                alert("Consulta agendada com sucesso")
             })
         }
 
