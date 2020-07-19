@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import HomePage from './Pages/Home'
 import PerfilPage from './Pages/Perfil/Perfil'
 import LayoutAccount from './Pages/LayoutAccount/LayoutAccount'

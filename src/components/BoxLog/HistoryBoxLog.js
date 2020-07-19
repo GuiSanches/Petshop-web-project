@@ -1,7 +1,7 @@
 import React from 'react'
 import './BoxLog.scss'
 import Db from '../Db/Db'
-import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
+import { UserCtx } from '../../components/context/UserCtx'
 
 const generateList = arrayProducts => arrayProducts.map(el => {
     const commomProducts = {
@@ -39,17 +39,6 @@ const generateItem = array => (
     </>
 )
 
-
-const item = [
-    '47 unidades',
-    <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
-    'Nome',
-    'Qtd',
-    'Preço'
-]
-
-const items = Array.from({ length: 7 }).fill(item)
-
 const generateBoxHeader = labels => labels.map(
     label => <div>{label}</div>
 )
@@ -57,7 +46,7 @@ const generateBoxHeader = labels => labels.map(
 const BoxLog = ({ title, headerLabels, getData }) => {
     const [cart, setCart] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
-    const { userData, type } = React.useContext(UserCtx)
+    const { userData } = React.useContext(UserCtx)
 
     React.useEffect(() => {
         if (userData._id) {

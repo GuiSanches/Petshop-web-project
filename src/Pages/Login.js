@@ -42,7 +42,7 @@ const LoginPage = props => {
                             value={email} onChange={handleEmailChange} />
                         <input type="password" placeholder="Senha"
                             value={password} onChange={handlePasswordChange} />
-                        <a href="">Esqueceu sua senha?</a>
+                        <a href="#crie-uma-nova-conta">Esqueceu sua senha?</a>
 
                         <div className="form-btn">
                             <a className="btn-acc" href="/account/create">Criar conta</a>

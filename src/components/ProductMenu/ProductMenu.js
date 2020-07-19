@@ -6,7 +6,6 @@ import { ProductCtx } from '../context/ProductsCtx'
 // get our fontawesome imports
 
 const ProductsPage = ({ title, search }) => {
-    const [loading, setLoading] = React.useState(true)
     const [cardsBack, setCardsBack] = React.useState(null)
     const [cardsFilter, setCardsFilter] = React.useState(cardsBack)
 
@@ -22,7 +21,6 @@ const ProductsPage = ({ title, search }) => {
             const filter = Products.filter(p => p.Nome.includes(search))
             setCardsBack(Products)
             setCardsFilter(filter.length > 0 ? filter : Products)
-            setLoading(false)
         }).catch(e => console.log(e))
     }, [])
 

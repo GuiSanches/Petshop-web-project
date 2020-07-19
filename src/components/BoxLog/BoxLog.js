@@ -1,19 +1,15 @@
 import React from 'react'
 import './BoxLog.scss'
-import { Link } from 'react-router-dom'
 import api from '../../components/Db/Db'
 import { UserCtx } from '../context/UserCtx'
 import { ProductCtx } from '../context/ProductsCtx'
 
-const BoxLog = ({ title, headerLabels, getData }) => {
+const BoxLog = ({ title, headerLabels }) => {
     const { Products, setProducts, clear, setProduct } = React.useContext(ProductCtx)
     const { userData } = React.useContext(UserCtx)
-    const [items_, setItems_] = React.useState(null)
-    const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
         const products = JSON.parse(localStorage.getItem('Products'))
-        setLoading(false)
         if (products)
             setProducts(products)
     }, [])
@@ -37,7 +33,8 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                     alert("Compra realizada com sucesso!")
                     clear()
                 })
-
+        }else {
+            alert("Seu carrinho está vazio. Adicione mais produtos")
         }
     }
 

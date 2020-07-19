@@ -1,8 +1,6 @@
 import React from 'react';
 import './TopBar.scss';
 import logo from '../../Images/logo.png'
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchProduct from '../SearchProduct/SearchProduct'
 
 const TopBar = () => {
