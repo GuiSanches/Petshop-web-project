@@ -3,7 +3,7 @@ import TopBar from '../../components/TopBar/TopBar';
 import Footer from '../../components/Footer/Footer'
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
-import { UserCtx, TOKEN_KEY } from '../../components/context/UserCtx'
+import { UserCtx } from '../../components/context/UserCtx'
 
 import BoxLog from '../../components/BoxLog/BoxLog'
 import InventoryBoxLog from '../../components/BoxLog/InventoryBoxLog'
@@ -59,7 +59,7 @@ const generateAdminActions = actions => {
 }
 
 const Perfil = props => {
-    const { userData, type, setUserByType } = React.useContext(UserCtx)
+    const { userData, type } = React.useContext(UserCtx)
 
     const generateUserInfo = userInfo => {
         const birth = new Date(userInfo.Nascimento)
@@ -251,8 +251,8 @@ const Perfil = props => {
         }, [])
 
         return (
-            <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' ? 'calendar' : ''}`}>
-                {userData.isDefault ? <p>Faça login cara de pastel</p> :
+            <div className={`Perfil-container ${window.location.pathname === '/perfil/agendamentos' & !userData.isDefault ? 'calendar' : ''}`}>
+                {userData.isDefault ? <p>Você precisa estar logado para realizar essa ação</p> :
                     <Switch>
                         <Route exact path="/perfil/carrinho-compras">
                             <BoxLog title="Carrinho de compras" headerLabels={headerLabels} />

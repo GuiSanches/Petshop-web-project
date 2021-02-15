@@ -10,10 +10,6 @@ const AddClient = _ => {
         {type: 'text', placeholder: 'Telefone'}
     ]
 
-    React.useEffect(_ => {
-        console.log('estou vivo')
-    })
-
     return (
         <div className="acc-box">
             <div className="acc cadastro">

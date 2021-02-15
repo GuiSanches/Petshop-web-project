@@ -1,6 +1,5 @@
 import React from 'react'
 import './BoxLog.scss'
-import { Link } from 'react-router-dom'
 import api from '../Db/Db'
 import { UserCtx } from '../context/UserCtx'
 
@@ -118,7 +117,6 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 try {
                     let { _id, ...Product } = Services.find(I => I._id.slice(0, ID_LEN) === popUpInputs[0][1])
                     let [id, ...inputParse] = popUpInputs
-                    console.log(_id, Product, inputParse)
                     inputParse = inputParse.map(i => i[1])
                     inputParse[1] = parseFloat(inputParse[1])
                     let idx = 0

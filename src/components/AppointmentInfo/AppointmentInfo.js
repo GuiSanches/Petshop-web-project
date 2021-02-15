@@ -11,7 +11,6 @@ const AppointmentDetail = props => {
             const AppointmentID = window.location.pathname.split('/')[3]
 
             api.getAppointmentDetail(AppointmentID).then(data => {
-                console.log(data)
                 const { Animal, Cliente, Data, Descricao, Veterinario, _id } = data[0]
                 setAppInfo({
                     Animal,
@@ -21,7 +20,7 @@ const AppointmentDetail = props => {
                     Veterinario: Veterinario[0],
                     _id
                 })
-                alert("FOI")
+                alert("Consulta agendada com sucesso")
             })
         }
 
@@ -45,7 +44,6 @@ const AppointmentDetail = props => {
     const formatCPFNumber = str => {
         //Filter only numbers from the input
         let cleaned = ('' + str).replace(/\D/g, '');
-        console.log(cleaned)
         //Check if the input is of correct
         let match = cleaned.match(/^(\d{3}|)(\d{3})(\d{3})(\d{2})$/);
         if (match)

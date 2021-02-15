@@ -57,7 +57,8 @@ const Registro = ({ state }) => {
     }, [state])
 
     React.useEffect(() => {
-        if (userData.atualizado) {
+        // console.log()
+        if (userData.atualizado && userData.Animais.length > 0) {
             console.log(userData, 'oi')
             api.getPetAppointment(userData['_id']).then(appointments => {
                 setAppointments(appointments)
@@ -75,7 +76,7 @@ const Registro = ({ state }) => {
     }, [userData])
 
     React.useEffect(_ => {
-        if (userData['_id']) {
+        if (userData['_id'] && userData.Animais.length > 0) {
             const petInfo = parsePets(
                 [userData.Animais[selectedGrid % cards.length]]
             )[0]
@@ -104,15 +105,18 @@ const Registro = ({ state }) => {
         }
     }
 
-    const parsePets = Animals => Animals.map(
-        a => ({
-            img: a['Especie'],
-            nasc: a['Nascimento'],
-            nome: a['Nome'],
-            porte: a['Porte'],
-            situacao: a['Situacao']
-        })
-    )
+    const parsePets = Animals => {
+        if (Animals[0])
+            return Animals.map(
+                a => ({
+                    img: a['Especie'],
+                    nasc: a['Nascimento'],
+                    nome: a['Nome'],
+                    porte: a['Porte'],
+                    situacao: a['Situacao']
+                })
+            )
+    }
 
     const handleClick = idx => {
         setSelectedGrid(idx)
@@ -130,7 +134,6 @@ const Registro = ({ state }) => {
 
     const handleDelete = _ => {
         api.removePet(userData['_id'], PetInfo.nome).then(e => {
-            alert('acho q foi')
             const Animais = userData.Animais.filter(a => a.Nome !== PetInfo.nome)
             const aux = Animais.length - carrouselLen - 1
             const swipes = aux < 0 ? 0 : aux
@@ -151,72 +154,73 @@ const Registro = ({ state }) => {
         })
     }
 
-    return (
-        <section id="registro-section">
-            <div id="registro-section-container">
+    return userData.Animais.length > 0 ?
+        (
+            <section id="registro-section">
+                <div id="registro-section-container">
 
-                <div className="selecionar-pet">
-                    <div id="titulo">
-                        <h1> Selecione seu pet </h1>
-                    </div>
-                    <div className="Promotions-cards-container">
-                        <div className="Promotions-cards-wrapper">
-                            <i className="material-icons seta-parc" style={{ fontSize: '200%' }}
-                                onClick={RotateLeft}
-                            >keyboard_arrow_left</i>
-                            <div className="carrousel-box"
-                                style={cards.length <= 2 ? { width: '50%' } : {}}>
-                                <Hammer
-                                    onSwipeRight={RotateLeft} onSwipeLeft={RotateRight} >
-                                    {/* 32% rotaion */}
-                                    <div className="promotions-carrousel"
-                                        style={{
-                                            transform: `translateX(${rotationGrid}%`,
-                                            ...(cards.length <= 2 ? { justifyContent: 'center' } : {})
-                                        }}>
-                                        {generateCards(cards, selectedGrid)}
-                                    </div>
-                                </Hammer>
+                    <div className="selecionar-pet">
+                        <div id="titulo">
+                            <h1> Selecione seu pet </h1>
+                        </div>
+                        <div className="Promotions-cards-container">
+                            <div className="Promotions-cards-wrapper">
+                                <i className="material-icons seta-parc" style={{ fontSize: '200%' }}
+                                    onClick={RotateLeft}
+                                >keyboard_arrow_left</i>
+                                <div className="carrousel-box"
+                                    style={cards.length <= 2 ? { width: '50%' } : {}}>
+                                    <Hammer
+                                        onSwipeRight={RotateLeft} onSwipeLeft={RotateRight} >
+                                        {/* 32% rotaion */}
+                                        <div className="promotions-carrousel"
+                                            style={{
+                                                transform: `translateX(${rotationGrid}%`,
+                                                ...(cards.length <= 2 ? { justifyContent: 'center' } : {})
+                                            }}>
+                                            {generateCards(cards, selectedGrid)}
+                                        </div>
+                                    </Hammer>
+                                </div>
+
+                                <i className="material-icons seta-parc"
+                                    style={{ fontSize: '200%' }}
+                                    onClick={RotateRight}
+                                >keyboard_arrow_right</i>
                             </div>
+                        </div>
 
-                            <i className="material-icons seta-parc"
-                                style={{ fontSize: '200%' }}
-                                onClick={RotateRight}
-                            >keyboard_arrow_right</i>
+                    </div>
+
+                    <div className="dados">
+                        <div className="info-pet">
+                            <div id="titulo"> <h1> Informações do Pet </h1> </div>
+                            <div id="info">
+                                <div> Nome: <span>{PetInfo.nome}</span> </div>
+                                <div> Idade: <span>{parseAge(PetInfo.nasc)}</span></div>
+                                <div> Tipo: <span>{PetInfo.img}</span></div>
+                                <div className="actions-btn">
+                                    <button onClick={handleDelete}>Remover registro</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="status-pet">
+                            <h3> Próxima Consulta:  {PetInfo.consulta}</h3>
+                            <ul>
+                                <li id="situacao-atual"> Situação Atual: {PetInfo.situacao}</li>
+                            </ul>
                         </div>
                     </div>
 
-                </div>
-
-                <div className="dados">
-                    <div className="info-pet">
-                        <div id="titulo"> <h1> Informações do Pet </h1> </div>
-                        <div id="info">
-                            <div> Nome: <input type="text" value={PetInfo.nome} /> </div>
-                            <div> Idade: <input type="text" value={parseAge(PetInfo.nasc)} /></div>
-                            <div> Tipo: <input type="text" value={PetInfo.img} /> </div>
-                            <div className="actions-btn">
-                                <button onClick={handleDelete}>Remover registro</button>
-                            </div>
-                        </div>
+                    <div className="registrar-btn">
+                        <a href="/perfil/registrar-pet"> Registrar novo Pet </a>
+                        <hr />
                     </div>
 
-                    <div className="status-pet">
-                        <h3> Próxima Consulta:  {PetInfo.consulta}</h3>
-                        <ul>
-                            <li id="situacao-atual"> Situação Atual: {PetInfo.situacao}</li>
-                        </ul>
-                    </div>
                 </div>
-
-                <div className="registrar-btn">
-                    <a href="/perfil/registrar-pet"> Registrar novo Pet </a>
-                    <hr />
-                </div>
-
-            </div>
-        </section >
-    )
+            </section >
+        ) : <h2>Desculpe, não encontramos pets</h2>
 }
 
 export default UserCtxHOC(RegistroPet)

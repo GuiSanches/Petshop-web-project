@@ -2,7 +2,7 @@ import React from 'react'
 import Calendar from '../Calendar/Calendar'
 import './Agendamentos.scss'
 import api from '../Db/Db'
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { UserCtx } from '../context/UserCtx'
 import AppointmentDetail from '../AppointmentInfo/AppointmentInfo'
 

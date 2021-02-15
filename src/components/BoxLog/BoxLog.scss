@@ -49,6 +49,10 @@ $radius: 14px;
     padding: 0 1em;
 }
 
+.cover {
+    background-size: cover !important;
+}
+
 .box-grid {
     display: grid;
     grid-template-columns: 7em 4em auto 3em 7em;

@@ -1,24 +1,24 @@
 import React from 'react'
 import './BoxLog.scss'
-import { Link } from 'react-router-dom'
 import api from '../../components/Db/Db'
 import { UserCtx } from '../context/UserCtx'
 import { ProductCtx } from '../context/ProductsCtx'
 
-const BoxLog = ({ title, headerLabels, getData }) => {
+const BoxLog = ({ title, headerLabels }) => {
     const { Products, setProducts, clear, setProduct } = React.useContext(ProductCtx)
     const { userData } = React.useContext(UserCtx)
-    const [items_, setItems_] = React.useState(null)
 
     React.useEffect(() => {
-        setProducts(JSON.parse(localStorage.getItem('Products')))
+        const products = JSON.parse(localStorage.getItem('Products'))
+        if (products)
+            setProducts(products)
     }, [])
 
     const parseItems = items => items.map(item => {
         item['Qtd'] = 1
         return ([
             `${item.Estoque} unidades`,
-            <i className="fab fa-facebook" style={{ fontSize: '4em' }}></i>,
+            <div className="img cover" style={{backgroundImage: `url(${require('../../Images/produtos/' + item.Foto)})`}}></div>,
             item.Nome,
             item.Qtd,
             item.Preco,
@@ -33,16 +33,21 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                     alert("Compra realizada com sucesso!")
                     clear()
                 })
-
+        }else {
+            alert("Seu carrinho está vazio. Adicione mais produtos")
         }
     }
 
-    const generateList = array => array.map((row, idx) => generateItem(row, idx))
+    const generateList = array => {
+        if (array[0])
+            return array.map((row, idx) => generateItem(row, idx))
+    }
     const handleRemove = idx => {
         let arr = [...Products]
         arr.splice(idx, 1)
         if (arr.length === 0) clear()
         else setProduct(arr)
+        localStorage.setItem('Products', JSON.stringify(arr))
     }
     const generateItem = (array, idx) => (
         <>
@@ -59,7 +64,8 @@ const BoxLog = ({ title, headerLabels, getData }) => {
     )
 
     const calculatePrice = Products => {
-        return Products.reduce((acc, el) => acc + parseFloat(el.price), 0)
+        if (Products[0])
+            return Products.reduce((acc, el) => acc + parseFloat(el.price), 0)
     }
 
     return (
@@ -72,7 +78,7 @@ const BoxLog = ({ title, headerLabels, getData }) => {
                 <div className="box-grid-container">
                     <div className="box-grid"> {/* Grid */}
                         {generateBoxHeader(headerLabels)}
-                        {Products.length > 0 && generateList(parseItems(Products))}
+                        {!Products.length[0] && generateList(parseItems(Products))}
 
                     </div>
 

@@ -1,18 +1,23 @@
 import React from 'react'
 import './SectionBrands.scss'
-import Marca from '../../Images/Marcas/hills.png'
+
+const Marcas = [
+    'hills.png',
+    'whiskas.png',
+    'pedigree.png',
+    'petfit.png',
+    'absolute-bites.png'
+]
 
 const Brands = _ => {
-    const images = []
-    for(let i = 0; i < 5; i++) images.push(Marca)
     return (
         <div id="image">
-            {images.map((i,j) => <img className="brand-img" key={j} src={Marca} alt=""/>)}
+            {Marcas.map((brand, j) => <img className="brand-img" key={j} src={require(`../../Images/Marcas/${brand}`)} alt="" />)}
         </div>
     )
 }
 
-const SectionBrand = ({title}) => {
+const SectionBrand = ({ title }) => {
 
     return (
         <div className="brands-container">

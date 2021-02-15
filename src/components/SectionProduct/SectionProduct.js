@@ -10,10 +10,15 @@ const SectionProduct = props => {
     const { sessionTitle, cards } = props
 
     const generateCards = cardsArray => {
-        return cardsArray.map((card,i) => {
+        return cardsArray.map((card, i) => {
+            let img = require(`../../Images/produtos/${card.img}`)
             return (
-                <div className="card-product" key={card + i}>
-                    <h1>{card.title}</h1>
+                <div className="card-product" key={card + i}
+                    style={{ backgroundImage: `url(${img})` }}>
+                    <div className="card-product-title">
+                        <h1>{card.title}</h1>
+                    </div>
+
                     <div className="product-subtitle">
                         {card.content}
                     </div>

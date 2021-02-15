@@ -17,8 +17,9 @@ const ProductsPage = () => {
     const cards = Array.from(
         { length: 7 },
         () => ({
-            title: "Card",
-            content: "Rações e biscoitos"
+            title: "Carregando...",
+            content: "",
+            img: 'dog-food.svg'
         })
     )
     const sessionsContent = [{
@@ -43,10 +44,10 @@ const ProductsPage = () => {
             const sessionData = {
                 sessionTitle: s.Titulo,
                 cards: s.Produtos.map(p => {
-                    console.log('p', p)
                     return ({
                         title: p.Nome,
-                        content: p.Tags[0]
+                        content: p.Tags[0],
+                        img: p.Foto
                     })
                 })
             }

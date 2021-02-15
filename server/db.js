@@ -128,8 +128,8 @@ const getProductsHighlights = async _ => {
     return db.collection('ofertas').aggregate([{
         "$lookup": {
             from: 'produtos',
-            localField: 'produtos',
-            foreignField: 'ofertas.Produtos',
+            localField: 'Produtos',
+            foreignField: '_id',
             as: 'Produtos'
         }
     }]).toArray()

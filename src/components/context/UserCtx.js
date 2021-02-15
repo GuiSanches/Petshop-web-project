@@ -21,31 +21,20 @@ const defaultUserData = {
     ...commonData
 }
 
-const defaultAdminData = {
-    DataNascimento: '17/09/2000',
-    ...commonData
-}
-
 export const UserCtx = React.createContext(defaultUserData)
 const UserCtxProvider = UserCtx.Provider
 const UserCtxConsumer = UserCtx.Consumer
-const matches = (obj, source) =>
-    Object.keys(source).every(key => obj.hasOwnProperty(key) && obj[key] === source[key]);
 
 export function UserContext(props) {
     const [userData, setUserData] = React.useState(defaultUserData)
-    const [load, setLoaded] = React.useState(false)
     const [type, setType] = React.useState('user')
-    // const [isMounted, setIsMounter] = React.useState(false)
 
     React.useEffect(_ => {
         let user = JSON.parse(localStorage.getItem(TOKEN_KEY))
-        if (!load && user) {
+        if (user) {
             user = user.user
             setUserData(user)
             setType(user.type)
-            setLoaded(true)
-            // alert('OI')
         }
     }, [])
 

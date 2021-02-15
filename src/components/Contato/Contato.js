@@ -1,7 +1,6 @@
 import React from 'react';
 import Topbar from '../TopBar/TopBar';
 import Footer from '../Footer/Footer'
-import queryString from 'query-string';
 import './Contato.scss'
 import { FaFacebook } from 'react-icons/fa'
 import { AiFillInstagram } from "react-icons/ai";

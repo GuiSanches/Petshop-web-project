@@ -1,19 +1,5 @@
 import React from 'react'
 
-const commonData = {
-    _id: 0,
-    Nome: 'Ração Golden',
-    Foto: 'dog-food.svg',
-    Preco: 45.60,
-    Estoque: 27,
-    Qtd: 5,
-    Descricao: "A ração golden alimenta seu cachorro e da brilho ao seu pelo (do cachorro)",
-    Tags: [
-        "Rações e biscoitos",
-        "cachorro",
-        "alimentos"
-    ]
-}
 export const ProductCtx = React.createContext([])
 
 export default function ProductContext(props) {

@@ -6,7 +6,6 @@ import { ProductCtx } from '../context/ProductsCtx'
 // get our fontawesome imports
 
 const ProductsPage = ({ title, search }) => {
-    const [loading, setLoading] = React.useState(true)
     const [cardsBack, setCardsBack] = React.useState(null)
     const [cardsFilter, setCardsFilter] = React.useState(cardsBack)
 
@@ -22,7 +21,6 @@ const ProductsPage = ({ title, search }) => {
             const filter = Products.filter(p => p.Nome.includes(search))
             setCardsBack(Products)
             setCardsFilter(filter.length > 0 ? filter : Products)
-            setLoading(false)
         }).catch(e => console.log(e))
     }, [])
 
@@ -180,9 +178,7 @@ const ProductsGrid = ({ cards }) => {
     const { Products } = React.useContext(ProductCtx)
 
     React.useEffect(() => {
-        return () => {
-            localStorage.setItem('Products', JSON.stringify(Products))
-        }
+        localStorage.setItem('Products', JSON.stringify(Products))
     }, [Products])
 
     const ProductCard = ({ card }) => {
@@ -195,7 +191,7 @@ const ProductsGrid = ({ cards }) => {
             <div className="product-grid-item" key={card.name}>
                 <div className="P-card-product">
                     <div className="product-image">
-                        <img src={require(`../../Images/Icones/${card.Foto}`)} alt="Imagem produto" />
+                        <img src={require(`../../Images/produtos/${card.Foto}`)} alt="Imagem produto" />
                     </div>
                     <div className="product-info">
                         <p>{card.name}</p>

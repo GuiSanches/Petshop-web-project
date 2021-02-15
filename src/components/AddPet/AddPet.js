@@ -44,7 +44,7 @@ const AddPet = _ => {
         <div className="acc-box">
             <div className="acc cadastro">
                 <p>Pedrigui's com você de P a I</p>
-                <h1>Adicione seu Animal</h1>
+                <h1>Adicionar pet</h1>
                 <form>
                     {inputs.map(i => <input type={i.type} placeholder={i.placeholder}
                         value={i.data.value} onChange={e => i.data.handle(e.target.value)} />)}
